@@ -1,0 +1,2428 @@
+/* Import Poppins Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Keyframes */
+@keyframes mobileFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes marquee {
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(-100%); }
+}
+
+@keyframes profileBounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-100px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes messageFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientGlow {
+    0% { box-shadow: 0 0 3px #001b60, 0 0 6px #001b60, 0 0 8px #01031d; }
+    50% { box-shadow: 0 0 5px #001b60, 0 0 8px #001b60, 0 0 10px #01031d; }
+    100% { box-shadow: 0 0 3px #001b60, 0 0 6px #001b60, 0 0 8px #01031d; }
+}
+
+@keyframes darkGradientGlow {
+    0% { box-shadow: 0 0 3px #FFFFFF, 0 0 6px #FFFFFF, 0 0 8px #D3D3D3; }
+    50% { box-shadow: 0 0 5px #FFFFFF, 0 0 8px #FFFFFF, 0 0 10px #D3D3D3; }
+    100% { box-shadow: 0 0 3px #FFFFFF, 0 0 6px #FFFFFF, 0 0 8px #D3D3D3; }
+}
+
+@keyframes bounce {
+    to { transform: translateY(-4px); }
+}
+@keyframes buttonBounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+    100% { transform: translateY(-2px); }
+}
+
+
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    font-family: "Poppins", sans-serif;
+    scroll-behavior: smooth;
+}
+
+:root {
+    --background: #F3F3F3;
+    --second-background: #CACACA;
+    --primary-color: #001b60;
+    --dark-color: #01031d;
+    --text-color: #000000;
+    --card-bg: #FFFFFF;
+    --gradient: linear-gradient(to right, #001b60, #01031d);
+}
+
+body.dark-mode {
+    --background: #1A1A1A;
+    --second-background: #333333;
+    --text-color: #FFFFFF;
+    --card-bg: #2A2A2A;
+    --gradient: linear-gradient(to right, #FFFFFF, #D3D3D3);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text-color);
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Gradient Text */
+span, .about-info p, .skills ul, .author-info h3, .cta-heading, .marquee, .faq-intro, .contact-intro {
+    background: var(--gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Mobile Scroll Animation */
+.mobile-scroll {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.mobile-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.no-js .mobile-scroll {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Greeting Popup */
+.greeting-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.greeting-popup.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.greeting-card {
+    position: relative;
+    background: linear-gradient(to right, #001b60, #01031d);
+    backdrop-filter: blur(30px);
+    border-radius: 15px;
+    padding: 2em;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    color: white;
+    animation: scaleUp 0.5s ease-out;
+}
+
+.greeting-card h2 {
+    font-size: 1.5em;
+    font-weight: 500;
+    margin-bottom: 0.5em;
+}
+
+.greeting-card p {
+    font-size: 0.8em;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 0.5em;
+}
+
+.greeting-card #closePopup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.greeting-card #closePopup:hover {
+    transform: rotate(90deg);
+}
+
+/* Navigation */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 0.8em 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 1000; 
+    border-radius: 30px;
+    border: 0.8px solid transparent;
+    transition: transform 0.3s ease; /* Smooth transition for hiding */
+}
+
+nav.hidden {
+    transform: translateY(-100%);
+}
+
+body.dark-mode nav {
+    background-color: var(--card-bg);
+}
+
+.logo {
+    font-size: clamp(1.5em, 5vw, 2em);
+    font-weight: 400;
+    color: var(--text-color);
+    opacity: 0.8;
+    transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .logo {
+    background: var(--gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.logo:hover {
+    opacity: 1;
+    background: var(--gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+nav ul {
+    display: flex;
+    gap: 1.5em;
+}
+
+nav ul a {
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: 0.875em;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode nav ul a {
+    background: var(--gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+nav ul a:hover {
+    opacity: 1;
+    background: var(--gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+nav ul a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+nav ul a:hover::after {
+    background: var(--gradient);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+}
+
+.btn.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1em;
+    font-weight: 300;
+    padding: 0.6em 1em;
+    border-radius: 50px;
+    border: 1px solid var(--dark-color);
+    color: var(--text-color);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: gradientGlow 2s ease-in-out infinite;
+}
+
+body.dark-mode .btn.nav-btn {
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    animation: darkGradientGlow 2s ease-in-out infinite;
+}
+
+.btn.nav-btn:hover {
+    background: var(--gradient);
+    color: white;
+    transform: scale(1.05);
+    animation: none;
+}
+
+body.dark-mode .btn.nav-btn:hover {
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(211, 211, 211, 0.7));
+    color: #01031d;
+    animation: none;
+}
+
+.btn.nav-btn:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+body.dark-mode .btn.nav-btn:focus {
+    outline: 3px solid #FFFFFF;
+}
+
+.mode-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.mode-toggle i {
+    font-size: 1.2em;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.mode-toggle:hover i {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: white;
+    transform: scale(1.1);
+}
+
+.menu-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+
+.btn {
+    padding: 0.6em 1em;
+    border-radius: 50px;
+    border: none; /* Remove border entirely */
+    font-size: 1em;
+    font-weight: 300;
+    letter-spacing: 1px;
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    outline: none; /* Remove default focus outline */
+}
+
+.btn:hover {
+    background: var(--gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 27, 96, 0.3);
+    transform: translateY(-2px);
+    animation: buttonBounce 0.4s ease-out;
+}
+
+body.dark-mode .btn:hover {
+    background: linear-gradient(to right, #FFFFFF, #D3D3D3);
+    color: #01031d;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    animation: buttonBounce 0.4s ease-out;
+}
+
+.btn.outline {
+    background: transparent;
+    color: var(--primary-color);
+    border: none; /* Remove border entirely */
+    box-shadow: inset 0 0 0 2px var(--primary-color); /* Simulate border with box-shadow */
+    outline: none; /* Remove default focus outline */
+}
+
+body.dark-mode .btn.outline {
+    background: transparent;
+    color: #FFFFFF;
+    box-shadow: inset 0 0 0 2px #FFFFFF; /* Dark mode outline simulation */
+}
+
+.btn.outline:hover {
+    background: var(--gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 27, 96, 0.3);
+    transform: translateY(-2px);
+    animation: buttonBounce 0.4s ease-out;
+}
+
+body.dark-mode .btn.outline:hover {
+    background: linear-gradient(to right, #FFFFFF, #D3D3D3);
+    color: #01031d;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    animation: buttonBounce 0.4s ease-out;
+}
+
+/* Updated focus styles */
+.btn:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 4px 12px rgba(0, 27, 96, 0.3); /* Match hover shadow for consistency */
+}
+
+body.dark-mode .btn:focus {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3); /* Match hover shadow for dark mode */
+}
+
+.btn.outline:focus {
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 27, 96, 0.3);
+}
+
+body.dark-mode .btn.outline:focus {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+.menu-toggle {
+    display: none;
+}
+
+#menu-open, #menu-close {
+    font-size: 2em;
+    color: #333333;
+    transition: opacity 0.3s ease;
+}
+
+body.dark-mode #menu-open, body.dark-mode #menu-close {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Section Styling */
+section {
+    padding: 2em 5%;
+    margin-top: 3em;
+    min-height: 50vh;
+    margin-bottom: 3em;
+}
+
+.content-section {
+    margin-top: 60px;
+    margin-bottom: 20px;
+}
+
+/* Home Section */
+#home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5em;
+    text-align: center;
+    padding-top: 4em;
+    background-color: var(--background);
+    margin-top: 1em;
+}
+
+#home .profile-img {
+    width: 40vw;
+    max-width: 300px;
+    border-radius: 50px;
+    animation: profileBounce 2s ease-in-out infinite;
+}
+
+.info-box {
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+}
+
+.info-box h1 {
+    font-size: clamp(2em, 8vw, 3em);
+    font-weight: 500;
+}
+
+.info-box h3 {
+    font-size: clamp(1em, 4vw, 1.2em);
+    font-weight: 300;
+}
+
+.info-box p {
+    opacity: 0.7;
+}
+
+.btn-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+}
+
+.btn-box .btn:nth-child(1) {
+    background: var(--primary-color);
+    color: var(--background);
+    border: 1px solid var(--dark-color);
+}
+
+body.dark-mode .btn-box .btn:nth-child(1) {
+    background: #333333;
+    color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+}
+
+.btn-box .btn:nth-child(1):hover {
+    background: var(--gradient);
+    color: white;
+}
+
+body.dark-mode .btn-box .btn:nth-child(1):hover {
+    background: #001b60;
+}
+
+.btn-box .btn:nth-child(2) {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+body.dark-mode .btn-box .btn:nth-child(2) {
+    background: transparent;
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF;
+}
+
+.btn-box .btn:nth-child(2):hover {
+    background: var(--gradient);
+    color: white;
+}
+
+body.dark-mode .btn-box .btn:nth-child(2):hover {
+    background: #001b60;
+}
+
+/* About Section */
+#about {
+    background-color: var(--second-background);
+    padding: 3em 5% 2em 5%;
+    min-height: 50vh;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    align-items: center;
+}
+
+.about-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    text-align: left;
+}
+.about-info p {
+    margin-bottom: 2em;
+}
+
+.about-info h1 {
+    font-size: clamp(1.5em, 6vw, 2em);
+    font-weight: 500;
+}
+
+.about-image {
+    flex: 0 0 320px;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    border-radius: 1em;
+    object-fit: cover;
+}
+
+.continue-reading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    color: var(--primary-color);
+    font-size: 0.9em;
+    font-weight: 400;
+    transition: color 0.3s ease;
+    animation: pulse 1.2s ease-in-out infinite;
+}
+
+body.dark-mode .continue-reading {
+    color: #FFFFFF;
+}
+
+.continue-reading i {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.continue-reading:hover {
+    color: var(--dark-color);
+}
+
+body.dark-mode .continue-reading:hover {
+    color: #D3D3D3;
+}
+
+/* Skills Section */
+.skills {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2em 0;
+}
+
+.skills-heading {
+    font-size: clamp(1.5em, 6vw, 2em);
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+
+.skills-content {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    width: 100%;
+}
+
+.focus-section, .skills-progress {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.focus-section {
+    align-items: flex-start;
+}
+
+.focus-section h3 {
+    font-size: clamp(1.2em, 4vw, 1.5em);
+    font-weight: 500;
+    text-align: left;
+    margin: 0;
+}
+
+.focus-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.focus-list ul li {
+    font-size: 0.9em;
+    line-height: 1.8;
+    color: var(--text-color);
+    opacity: 0.9;
+    text-align: left;
+}
+
+.skills-progress ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.skills-progress ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.skills-progress ul li span {
+    font-size: 0.9em;
+    color: var(--text-color);
+    opacity: 0.9;
+    flex: 0 0 120px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: var(--gradient);
+    border-radius: 5px;
+    transition: width 1s ease-in-out;
+}
+
+.slide-left {
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
+.slide-right {
+    opacity: 0;
+    transform: translateX(100px);
+}
+
+.slide-left.visible {
+    animation: slideInLeft 0.8s ease forwards;
+}
+
+.slide-right.visible {
+    animation: slideInRight 0.8s ease forwards;
+}
+
+/* Projects Section */
+#projects {
+    background-color: var(--background);
+    padding: 3em 5% 2em 5%;
+}
+
+.projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.header {
+    text-align: center;
+    font-size: clamp(2em, 6vw, 2.5em);
+    font-weight: 500;
+    margin-bottom: 1em;
+}
+
+.projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5em;
+    padding: 1em;
+}
+
+.box, .project-card {
+    border: 2px solid #313131;
+    border-radius: 12px;
+    padding: 1.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, border-image 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.box:hover, .project-card:hover {
+    transform: scale(1.02);
+    border-image: var(--gradient) 1;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.box img, .project-card img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 0.3em;
+}
+
+.box h1, .project-card h3 {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.box p, .project-card p {
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.view-site {
+    color: #001b60;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    transition: opacity 0.3s ease;
+}
+
+body.dark-mode .view-site {
+    color: #FFFFFF;
+}
+
+.view-site i {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.view-site:hover {
+    opacity: 0.8;
+}
+
+#projects.projects-page .projects-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    padding: 1em;
+    align-items: center;
+}
+
+#projects.projects-page .project-card {
+    width: 100%;
+    max-width: 800px;
+}
+
+#projects.projects-page .project-card img {
+    max-width: 800px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 0.3em;
+}
+
+#projects.projects-page .project-description {
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.see-more {
+    color: #001b60;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    transition: opacity 0.3s ease;
+}
+
+body.dark-mode .see-more {
+    color: #FFFFFF;
+}
+
+.see-more i {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.see-more:hover {
+    opacity: 0.8;
+}
+
+/* Testimonials Section */
+#testimonials {
+    background-color: var(--background);
+    padding: 3em 5%;
+}
+
+.testimonials-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5em;
+    padding: 1em;
+}
+
+.testimonial-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5em;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.testimonial-card p {
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.testimonial-author {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1em;
+}
+
+.author-info p {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 0.2em;
+}
+
+.company-logo {
+    max-width: 60px;
+    height: auto;
+    opacity: 0.8;
+}
+
+/* FAQ Section */
+#faq {
+    background-color: var(--background);
+    padding: 2em 5% 2em 5%;
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
+
+.faq-intro {
+    font-size: 1em;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.faq-item {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.faq-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 1.5em;
+    cursor: pointer;
+    background-color: var(--card-bg);
+}
+
+.faq-question h3 {
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.faq-question i {
+    font-size: 1.2em;
+    color: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 1.5em;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+    padding: 1em 1.5em;
+}
+
+.faq-answer p {
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.index-page #faq {
+    padding: 1.5em 5%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.index-page .faq-container {
+    gap: 1em;
+}
+
+/* Blog Section */
+#blog {
+    background-color: var(--background);
+    padding: 2em 5% 2em 5%;
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+
+.blog-link {
+    display: block;
+    border: 2px solid #313131;
+    border-radius: 12px;
+    padding: 1.5em;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, border-image 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    text-decoration: none;
+    color: inherit;
+}
+
+.blog-link:hover {
+    transform: scale(1.02);
+    border-image: var(--gradient) 1;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.blog-link img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 0.3em;
+}
+
+.index-page #blog {
+    padding: 1.5em 5%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.index-page .projects-container {
+    gap: 1em;
+}
+
+.index-page .blog-link {
+    padding: 1em;
+}
+
+/* AI Chatbot Section */
+#ai-chatbot {
+    background-color: var(--background);
+    padding: 1.5em 5%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+#ai-chatbot .chatbot-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: 15px;
+    border: 2px solid transparent;
+    border-image: var(--gradient) 1;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#ai-chatbot .chatbot-messages {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+body.dark-mode #ai-chatbot .chatbot-messages {
+    background: #333333;
+}
+
+#ai-chatbot .message {
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+    line-height: 1.4;
+    font-size: 0.9rem;
+    animation: messageFadeIn 0.3s ease-out;
+}
+
+#ai-chatbot .bot-message {
+    background: var(--gradient);
+    color: #fff;
+    margin-right: auto;
+    border-bottom-left-radius: 5px;
+}
+
+body.dark-mode #ai-chatbot .bot-message {
+    background: linear-gradient(to right, #ffffff, #d3d3d3);
+    color: #000000;
+}
+
+#ai-chatbot .user-message {
+    background: #e0e0e0;
+    color: #333;
+    margin-left: auto;
+    border-bottom-right-radius: 5px;
+}
+
+body.dark-mode #ai-chatbot .user-message {
+    background: #4A5568;
+    color: #FFFFFF;
+}
+
+#ai-chatbot .typing {
+    display: flex;
+    align-items: center;
+    background: var(--gradient);
+    color: #fff;
+    padding: 5px 15px;
+    margin-right: auto;
+    border-bottom-left-radius: 5px;
+}
+
+body.dark-mode #ai-chatbot .typing {
+    background: linear-gradient(to right, #ffffff, #d3d3d3);
+    color: #000000;
+}
+
+#ai-chatbot .typing-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: bounce 0.6s infinite alternate;
+}
+
+body.dark-mode #ai-chatbot .typing-dot {
+    background: #000000;
+}
+
+#ai-chatbot .typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+#ai-chatbot .typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+#ai-chatbot .chatbot-input {
+    display: flex;
+    gap: 10px;
+}
+
+#ai-chatbot .chatbot-input input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s;
+    background: #fff;
+}
+
+body.dark-mode #ai-chatbot .chatbot-input input {
+    background: #333333;
+    border: 1px solid #4A5568;
+    color: #FFFFFF;
+}
+
+#ai-chatbot .chatbot-input input:focus {
+    border: 1px solid var(--primary-color);
+}
+
+body.dark-mode #ai-chatbot .chatbot-input input:focus {
+    border: 1px solid #FFFFFF;
+}
+
+#ai-chatbot .chatbot-send {
+    padding: 12px 20px;
+    background: var(--gradient);
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: gradientGlow 2s ease-in-out infinite;
+}
+
+body.dark-mode #ai-chatbot .chatbot-send {
+    background: linear-gradient(to right, #ffffff, #d3d3d3);
+    color: #000000;
+    border: 1px solid #FFFFFF;
+}
+
+#ai-chatbot .chatbot-send:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+body.dark-mode #ai-chatbot .chatbot-send:hover {
+    background: linear-gradient(to right, #d3d3d3, #ffffff);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+}
+
+#ai-chatbot .chatbot-send:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+body.dark-mode #ai-chatbot .chatbot-send:focus {
+    outline: 3px solid #FFFFFF;
+}
+
+/* Crypto News Section */
+#crypto-news .box {
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+#crypto-news .box h1 {
+    font-size: 1rem;
+    margin: 10px 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#crypto-news .box img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    margin: 0 auto 10px auto;
+}
+
+#crypto-news .view-site {
+    margin-top: auto;
+}
+
+#crypto-news .projects-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+#crypto-news .projects-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for 3 cards per row */
+    gap: 1.5em;
+    padding: 1em;
+}
+#crypto-news .refresh-container {
+    margin-top: 10px;
+}
+
+#crypto-news .refresh-link {
+    font-size: 0.9rem;
+    text-decoration: none;
+    background: linear-gradient(to right, #001b60, #01031d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: opacity 0.3s;
+}
+
+#crypto-news .refresh-link:hover {
+    opacity: 0.8;
+}
+
+body.dark-mode #crypto-news .refresh-link {
+    background: linear-gradient(to right, #ffffff, #d3d3d3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Crypto Charts Section */
+#crypto-charts .box {
+    padding: 0;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+#crypto-charts .tradingview-widget-container {
+    width: 100%;
+    max-width: 1200px;
+    height: 700px;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+/* Contact Section */
+#contact {
+    background-color: var(--second-background);
+    padding: 2em 5% 2em 5%;
+    position: relative;
+    z-index: 1;
+}
+
+form textarea {
+    -webkit-user-select: text;
+    user-select: text;
+    touch-action: manipulation;
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.contact-intro {
+    font-size: clamp(1em, 2.5vw, 1.125em);
+    font-weight: 200;
+    opacity: 0.85;
+    max-width: 700px;
+    margin: 0 auto 1.5em;
+    color: var(--text-color);
+    line-height: 1.6;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    align-items: center;
+    min-width: 300px;
+    margin: 0 auto;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    width: 50%;
+}
+
+form input, form textarea {
+    font-size: 1em;
+    padding: 0.6em 1.2em;
+    border: none;
+    border-radius: 0.5em;
+    outline: none;
+    resize: vertical;
+    background: #e0e0e0;
+    transition: background 0.3s ease;
+}
+
+body.dark-mode form input, body.dark-mode form textarea {
+    background: #4A5568;
+    color: #FFFFFF;
+}
+
+form input:focus, form textarea:focus {
+    background: #e5e5e5;
+}
+
+body.dark-mode form input:focus, body.dark-mode form textarea:focus {
+    background: #5A6A7A;
+}
+
+/* Footer */
+footer {
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em 5%;
+    gap: 1.5em;
+    margin-bottom: 0;
+}
+
+.col-left, .col-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}
+
+.col-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+}
+
+.col-box i {
+    font-size: 1.2em;
+    color: var(--primary-color);
+}
+
+.col-right .social-icons {
+    display: flex;
+    gap: 1em;
+}
+
+.col-right .social-icons a {
+    text-decoration: none;
+}
+
+.col-right .social-icons i {
+    font-size: 1.5em;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.col-right .social-icons a:hover i {
+    transform: scale(1.2);
+}
+
+body.dark-mode .col-right .social-icons a:hover i {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+footer .copyright {
+    text-align: center;
+    font-size: 0.875em;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-top: 1.5em;
+}
+
+/* Marquee */
+.marquee-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
+.marquee {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: clamp(12px, 4vw, 16px);
+    font-weight: 300;
+    animation: marquee 30s linear infinite;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+/* CTA */
+.cta-container {
+    text-align: center;
+    margin-top: 1.5em;
+    padding: 1.5em 1em;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-subtext {
+    font-size: clamp(1em, 2.5vw, 1.125em);
+    font-weight: 200;
+    opacity: 0.85;
+    max-width: 700px;
+    margin: 0 auto 1.5em;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: clamp(1em, 2vw, 1.25em);
+    padding: 0.65em 1.75em;
+    background: var(--gradient);
+    color: white;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    border: 1px solid #fff;
+    font-weight: 300;
+    animation: gradientGlow 2s ease-in-out infinite;
+}
+
+body.dark-mode .cta-button {
+    background: #333333;
+    color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+}
+
+body.dark-mode .cta-button:hover {
+    background: #001b60;
+}
+
+.cta-button:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+body.dark-mode .cta-button:focus {
+    outline: 3px solid #FFFFFF;
+}
+
+.cta-button i {
+    font-size: 1.2em;
+}
+/* Crypto Calculator Section */
+#crypto-calculator .calculator-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding: 1em;
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#crypto-calculator .calculator-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+#crypto-calculator .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    position: relative;
+}
+
+#crypto-calculator .input-group label span {
+    font-size: 0.9em;
+    font-weight: 500;
+    background: var(--gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+#crypto-calculator .input-group input,
+#crypto-calculator .input-group select {
+    padding: 0.8em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9em;
+    background: #fff;
+    color: var(--text-color);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+body.dark-mode #crypto-calculator .input-group input,
+body.dark-mode #crypto-calculator .input-group select {
+    background: #333333;
+    border: 1px solid #4A5568;
+    color: #FFFFFF;
+}
+
+#crypto-calculator .input-group input:focus,
+#crypto-calculator .input-group select:focus {
+    border-color: var(--primary-color);
+}
+
+body.dark-mode #crypto-calculator .input-group input:focus,
+body.dark-mode #crypto-calculator .input-group select:focus {
+    border-color: #FFFFFF;
+}
+
+#crypto-calculator .suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--card-bg);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode #crypto-calculator .suggestions-list {
+    background: #333333;
+    border: 1px solid #4A5568;
+}
+
+#crypto-calculator .suggestions-list li {
+    padding: 0.8em;
+    font-size: 0.9em;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#crypto-calculator .suggestions-list li:hover {
+    background: #e0e0e0;
+}
+
+body.dark-mode #crypto-calculator .suggestions-list li:hover {
+    background: #4A5568;
+}
+
+#crypto-calculator #calculate-btn {
+    align-self: center;
+    padding: 0.8em 1.5em;
+    font-size: 1em;
+    background: var(--gradient);
+    color: #fff;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: gradientGlow 2s ease-in-out infinite;
+}
+
+body.dark-mode #crypto-calculator #calculate-btn {
+    background: linear-gradient(to right, #ffffff, #d3d3d3);
+    color: #000000;
+    border: 1px solid #FFFFFF;
+}
+
+#crypto-calculator #calculate-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+body.dark-mode #crypto-calculator #calculate-btn:hover {
+    background: linear-gradient(to right, #d3d3d3, #ffffff);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+}
+
+#crypto-calculator .calculator-result {
+    text-align: center;
+    font-size: 1em;
+    min-height: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e0e0e0;
+    border-radius: 8px;
+    padding: 0.8em;
+}
+
+#crypto-calculator .calculator-result span {
+    background: var(--gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+body.dark-mode #crypto-calculator .calculator-result {
+    background: #4A5568;
+}
+
+#crypto-calculator .calculator-result.error span {
+    color: #e53e3e;
+    background: none;
+    -webkit-background-clip: initial;
+}
+
+
+
+
+/* Global Styles (outside media queries) */
+#crypto-charts .header {
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Media Queries for Desktop View */
+@media (min-width: 969px) {
+    .menu-toggle {
+        display: none;
+    }
+
+    .menu-toggle-container .mode-toggle {
+        display: none;
+    }
+
+    .links .btn.nav-btn {
+        display: none;
+    }
+
+    .nav-right {
+        display: flex;
+    }
+
+    #home {
+        gap: 2em;
+    }
+
+    .info-box {
+        gap: 1em;
+    }
+
+    .btn-box {
+        margin-top: 2em;
+    }
+
+    nav {
+        transition: transform 0.3s ease;
+    }
+
+    .slide-left.visible {
+        animation: slideInLeft 0.6s ease-out forwards;
+    }
+
+    .slide-right.visible {
+        animation: slideInRight 0.6s ease-out forwards;
+    }
+}
+
+/* Media Queries for Mobile View */
+@media (max-width: 968px) {
+    nav {
+        padding: 1em 5%;
+        transition: transform 0.3s ease;
+    }
+
+    nav.hidden {
+        transform: translateY(-100%);
+    }
+
+    .nav-right {
+        display: none;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu-toggle-container {
+        display: flex;
+        align-items: center;
+    }
+
+    #menu-open, #menu-close {
+        font-size: 2em;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 1em;
+        background-color: rgba(222, 222, 222, 0.95);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s ease;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    body.dark-mode .links {
+        background-color: var(--card-bg);
+    }
+
+    .links.active {
+        display: flex;
+    }
+
+    .links a {
+        font-size: 1.2em;
+        margin: 0.8em 0;
+    }
+
+    section {
+        padding: 1em 5%;
+        padding-top: 4em;
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+    }
+
+    #home {
+        padding-top: 6.5em;
+        margin-top: 0.5em;
+        margin-bottom: 0.2em;
+        gap: 1em;
+    }
+
+    .info-box {
+        padding-left: 1em;
+        padding-right: 1em;
+        max-width: 100%;
+        gap: 0.5em;
+    }
+
+    .btn-box {
+        margin-top: 1em;
+    }
+
+    #about {
+        padding: 1em 5%;
+        padding-top: 4em;
+        margin-top: 0.5em;
+        margin-bottom: 0.2em;
+    }
+    body:not(.index-page) #about {
+        padding-top: 7em;
+    }
+    #about .header {
+        margin-top: -1.5em;
+    }
+
+    .about-container {
+        gap: 0.3em;
+    }
+
+    .about-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+    }
+
+    #about .about-info {
+        align-items: center;
+        gap: 0.5em;
+        padding: 0 1em;
+    }
+
+    #about .about-info p {
+        text-align: center;
+        margin: 0 0 2em 0;
+        font-size: 0.95em;
+    }
+
+    #about .about-info .cta-button {
+        display: block;
+        margin: 1em auto 0.5em;
+        text-align: center;
+    }
+
+    #about .about-info .continue-reading {
+        margin-top: 1em;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .about-image {
+        max-width: 280px;
+    }
+
+    #projects, #blog, #faq, #testimonials, #ai-chatbot, #crypto-news, #crypto-charts {
+        padding: 1em 5%;
+        padding-top: 4em;
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+    }
+
+    .index-page #blog {
+        padding-top: 3em;
+    }
+
+    .index-page #faq {
+        padding-top: 1.5em;
+        margin-bottom: 0.8em;
+    }
+
+    .content-section {
+        margin-top: 40px;
+        margin-bottom: 10px;
+    }
+
+    #projects.projects-page .projects-container {
+        gap: 1em;
+    }
+
+    #projects.projects-page .project-card {
+        padding: 0.8em;
+        max-width: 100%;
+    }
+
+    #projects.projects-page .project-card img {
+        max-width: 100%;
+        max-height: 300px;
+        width: 100%;
+        height: auto;
+    }
+
+    #projects.projects-page .project-card h3 {
+        font-size: 1em;
+    }
+
+    #projects.projects-page .project-description {
+        font-size: 0.85em;
+    }
+
+    .projects-container {
+        gap: 1em;
+    }
+
+    .faq-container {
+        gap: 1em;
+    }
+
+    footer {
+        padding: 1em 5%;
+        margin-bottom: 0;
+    }
+
+    .col-left, .col-right {
+        align-items: center;
+        text-align: center;
+        gap: 0.5em;
+    }
+
+    .col-box {
+        justify-content: center;
+    }
+
+    .col-right .social-icons {
+        justify-content: center;
+    }
+
+    .col-right .social-icons i {
+        font-size: 1.8em;
+    }
+
+    .greeting-card {
+        padding: 1em;
+        width: 90%;
+        max-width: 100%;
+        margin: 0 0.5em;
+        box-sizing: border-box;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        animation: none;
+    }
+
+    .greeting-card h2 {
+        font-size: 1.3em;
+    }
+
+    .greeting-card p {
+        font-size: 0.75em;
+    }
+
+    .skills {
+        padding: 1em 0;
+        padding-top: 2em;
+        margin-bottom: 0.5em;
+    }
+
+    .skills-heading {
+        margin-bottom: 1em;
+    }
+
+    .skills-content {
+        flex-direction: column;
+        gap: 1em;
+        align-items: center;
+    }
+
+    .focus-section {
+        align-items: center;
+        gap: 0.5em;
+    }
+
+    .focus-section h3 {
+        text-align: center;
+    }
+
+    .focus-list ul li {
+        text-align: center;
+    }
+
+    .skills-progress {
+        width: 100%;
+        max-width: 400px;
+        gap: 0.5em;
+        padding: 0 1em;
+    }
+
+    .skills-progress ul li {
+        margin-bottom: 0.8em;
+    }
+
+    .skills-progress ul li span {
+        flex: 0 0 90px;
+        text-align: left;
+        padding-right: 0.5em;
+    }
+
+    .progress-bar {
+        width: 100%;
+        max-width: 200px;
+        margin-left: 0.5em;
+    }
+
+    form {
+        gap: 0.8em;
+        padding: 0.2em;
+    }
+
+    .input-box {
+        gap: 0.3em;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    form input, form textarea {
+        padding: 0.5em 1em;
+        font-size: 0.95em;
+    }
+
+    form textarea {
+        padding: 0.8em 1.2em;
+    }
+
+    form .btn {
+        margin-top: 1em;
+    }
+
+    .mobile-scroll {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    }
+
+    .mobile-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+        animation: mobileFadeIn 0.6s ease-out forwards;
+    }
+
+    .slide-left.visible {
+        animation: slideInLeft 0.6s ease-out forwards;
+    }
+
+    .slide-right.visible {
+        animation: slideInRight 0.6s ease-out forwards;
+    }
+}
+
+@media (max-width: 768px) {
+    #ai-chatbot {
+        padding: 0.8em 5%;
+        margin-top: 0.8em;
+        margin-bottom: 0.8em;
+    }
+
+    #ai-chatbot .chatbot-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    #ai-chatbot .chatbot-messages {
+        max-height: 300px;
+    }
+
+    #ai-chatbot .message {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+    }
+
+    #ai-chatbot .chatbot-input input {
+        padding: 10px;
+    }
+
+    #ai-chatbot .chatbot-send {
+        padding: 10px 15px;
+    }
+
+    #crypto-calculator .calculator-inputs {
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    #crypto-calculator .input-group {
+        width: 100%;
+    }
+
+    #crypto-calculator .input-group input,
+    #crypto-calculator .input-group select {
+        width: 100%;
+        font-size: 0.85em;
+        padding: 0.6em;
+    }
+
+    #crypto-calculator .suggestions-list {
+        width: 100%;
+    }
+
+    #crypto-calculator #calculate-btn {
+        width: auto;
+        padding: 0.6em 1.2em;
+    }
+
+    #crypto-calculator .calculator-result {
+        font-size: 0.9em;
+        padding: 0.6em;
+    }
+
+    #crypto-news .box h1 {
+        font-size: 0.9rem;
+    }
+
+    #crypto-news .box img {
+        max-height: 130px;
+    }
+
+    #crypto-news .projects-container {
+        grid-template-columns: 1fr;
+    }
+
+    #crypto-charts .tradingview-widget-container {
+        width: 100%;
+        max-width: 100%;
+        height: 400px;
+        min-height: 250px;
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+    #crypto-charts .box {
+        padding: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    nav {
+        padding: 0.8em 4%;
+    }
+
+    section {
+        padding: 0.8em 4%;
+        padding-top: 3.5em;
+        margin-top: 0.3em;
+        margin-bottom: 0.3em;
+    }
+
+    #home {
+        padding-top: 6em;
+        margin-top: 0.4em;
+        gap: 1em;
+    }
+
+    .info-box {
+        gap: 0.5em;
+    }
+
+    .btn-box {
+        margin-top: 1em;
+    }
+
+    .info-box h1 {
+        font-size: clamp(1.8em, 6vw, 2em);
+    }
+
+    .info-box h3 {
+        font-size: 0.95em;
+    }
+
+    #home .profile-img {
+        width: 50vw;
+        max-width: 200px;
+    }
+
+    #about {
+        padding: 0.8em 4%;
+        padding-top: 4em;
+        margin-top: 0.5em;
+        margin-bottom: 0.3em;
+    }
+
+    #about .about-info p {
+        font-size: 0.9em;
+    }
+
+    .about-info h1 {
+        font-size: clamp(1.3em, 5vw, 1.8em);
+    }
+
+    .about-image {
+        max-width: 240px;
+    }
+
+    #projects, #blog, #faq, #testimonials, #ai-chatbot, #crypto-news, #crypto-charts {
+        padding: 0.8em 4%;
+        padding-top: 3.5em;
+        margin-top: 0.3em;
+        margin-bottom: 0.3em;
+    }
+
+    .index-page #blog {
+        padding-top: 2.5em;
+        margin-top: 0.8em;
+        margin-bottom: 0.8em;
+    }
+
+    .index-page #faq {
+        padding-top: 1.2em;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+
+    .projects-container {
+        grid-template-columns: 1fr;
+        gap: 0.8em;
+    }
+
+    #projects.projects-page .projects-container {
+        gap: 0.8em;
+    }
+
+    #projects.projects-page .project-card {
+        padding: 0.6em;
+    }
+
+    #projects.projects-page .project-card img {
+        max-width: 100%;
+        max-height: 250px;
+        width: 100%;
+        height: auto;
+    }
+
+    #projects.projects-page .project-card h3 {
+        font-size: 0.95em;
+    }
+
+    #projects.projects-page .project-description {
+        font-size: 0.8em;
+    }
+
+    .project-card img, .blog-link img {
+        max-height: 150px;
+    }
+
+    .testimonial-card {
+        padding: 0.8em;
+    }
+
+    .testimonial-card p {
+        font-size: 0.85em;
+    }
+
+    .author-info h3 {
+        font-size: 0.9em;
+    }
+
+    .author-info p {
+        font-size: 0.75em;
+    }
+
+    .company-logo {
+        max-width: 50px;
+    }
+
+    .faq-question h3 {
+        font-size: 0.95em;
+    }
+
+    .faq-answer p {
+        font-size: 0.85em;
+    }
+
+    .greeting-card {
+        padding: 1.2em;
+    }
+
+    .greeting-card h2 {
+        font-size: 1.3em;
+    }
+
+    .greeting-card p {
+        font-size: 0.75em;
+    }
+
+    .greeting-card #closePopup {
+        font-size: 1.3em;
+    }
+
+    .skills-heading {
+        font-size: clamp(1.3em, 5vw, 1.8em);
+        margin-bottom: 0.8em;
+    }
+
+    .focus-section h3 {
+        font-size: clamp(1em, 3vw, 1.3em);
+    }
+
+    .focus-list ul li, .skills-progress ul li span {
+        font-size: 0.85em;
+    }
+
+    .progress-bar {
+        height: 8px;
+        max-width: 180px;
+    }
+
+    .marquee-container {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    #ai-chatbot {
+        padding: 0.6em 4%;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+
+    #ai-chatbot .chatbot-container {
+        padding: 10px;
+    }
+
+    #ai-chatbot .chatbot-messages {
+        max-height: 200px;
+    }
+
+    #ai-chatbot .message {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+
+    #ai-chatbot .chatbot-input input {
+        padding: 8px;
+    }
+
+    #ai-chatbot .chatbot-send {
+        padding: 8px 12px;
+    }
+
+    form {
+        gap: 0.8em;
+        padding: 0 1.5em;
+    }
+
+    .input-box {
+        gap: 0.3em;
+        max-width: 280px;
+    }
+
+    form input, form textarea {
+        padding: 0.4em 0.8em;
+        font-size: 0.9em;
+    }
+
+    #crypto-calculator .calculator-container {
+        padding: 0.8em;
+    }
+
+    #crypto-calculator .input-group label span {
+        font-size: 0.85em;
+    }
+
+    #crypto-calculator .input-group input,
+    #crypto-calculator .input-group select {
+        padding: 0.6em;
+        font-size: 0.85em;
+    }
+
+    #crypto-calculator .suggestions-list li {
+        padding: 0.6em;
+        font-size: 0.85em;
+    }
+
+    #crypto-calculator #calculate-btn {
+        padding: 0.6em 1.2em;
+        font-size: 0.9em;
+    }
+
+    #crypto-calculator .calculator-result {
+        font-size: 0.9em;
+        padding: 0.6em;
+    }
+
+    #crypto-news .projects-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-reveal, section, .info-box, .header, .testimonial-card, .greeting-card, .profile-img, .faq-item, .project-card, .message, .continue-reading, .slide-left, .slide-right {
+        animation: none;
+    }
+}

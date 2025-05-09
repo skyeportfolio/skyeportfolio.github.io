@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog posts by Daniel Owolabi on UI/UX design, web development, and crypto news.">
+    <meta name="keywords" content="UI/UX design, web development, crypto news, blog, Daniel Owolabi">
+    <meta name="author" content="Daniel Owolabi">
+    <title>Tech Nexus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="mobile-scroll">
+        <a href="index.html" class="logo"><span>Skye</span></a>
+        <div class="menu-toggle-container">
+            <div class="mode-toggle" title="Toggle Dark Mode">
+                <i class='bx bx-moon' id="dark-mode-toggle"></i>
+            </div>
+            <div class="menu-toggle">
+                <i class='bx bx-menu-alt-right' id="menu-open"></i>
+                <i class='bx bx-x' id="menu-close" style="display: none;"></i>
+            </div>
+        </div>
+        <ul class="links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="technexus.html">Tech Nexus</a></li>
+            <li><a href="contact.html" class="btn nav-btn">Contact Me <i class='bx bxs-chevron-right'></i></a></li>
+        </ul>
+        <div class="nav-right">
+            <a href="contact.html" class="btn nav-btn">Contact Me <i class='bx bxs-chevron-right'></i></a>
+            <div class="mode-toggle" title="Toggle Dark Mode">
+                <i class='bx bx-moon' id="dark-mode-toggle"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blog Section -->
+    <section id="blog" class="mobile-scroll content-section">
+        <div class="projects-header">
+            <h1 class="header mobile-scroll"><span>Blog</span></h1>
+        </div>
+        <div class="projects-container">
+            <a href="https://bit.ly/safe-memecoins-guide" class="blog-link" target="_blank" rel="noopener noreferrer">
+                <div class="box mobile-scroll">
+                    <h1><span>Don't Get RUGGED</span></h1>
+                    <p>Avoid Memecoin Scams Like a Pro Laugh All the Way to the Bank: Avoid Meme Coin Scams Like a Pro | Notion</p>
+                    <img src="images/memecoin1.png" alt="Blog post" onerror="this.src='https://via.placeholder.com/300x200?text=Memecoin+Guide';">
+                </div>
+            </a>
+            <a href="https://example.com" class="blog-link" target="_blank" rel="noopener noreferrer">
+                <div class="box mobile-scroll">
+                    <h1><span>UI/UX Design Trends</span></h1>
+                    <p>Exploring the latest trends in user interface design</p>
+                    <img src="images/memecoin1.png" alt="UI/UX Trends" onerror="this.src='https://via.placeholder.com/300x200?text=UIUX+Trends';">
+                </div>
+            </a>
+            <a href="https://t.me/blumcrypto/891" class="blog-link" target="_blank" rel="noopener noreferrer">
+                <div class="box mobile-scroll">
+                    <h1><span>How to spot a legit token from a scam?🕵️‍♂️</span></h1>
+                    <p>Blum gives you verified charts, holder stats, and community signals – so you can spot scams before they spot you.</p>
+                    <img src="images/blum.jpeg" alt="Responsive Design" onerror="this.src='https://via.placeholder.com/300x200?text=Responsive+Design';">
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Latest News Section -->
+    <section id="crypto-news" class="content-section">
+        <div class="projects-header">
+            <h1 class="header"><span>Latest News</span></h1>
+            <div class="refresh-container">
+                <a href="#" id="news-refresh" class="refresh-link">Refresh</a>
+            </div>
+        </div>
+        <div class="projects-container" id="crypto-news-container">
+            <!-- News will be populated via JavaScript -->
+        </div>
+    </section>
+
+    <!-- Crypto Charts Section -->
+    <section id="crypto-charts" class="mobile-scroll content-section">
+        <div class="projects-header">
+            <h1 class="header mobile-scroll"><span>Live Crypto & Stock Chart</span></h1>
+        </div>
+        <div class="projects-container">
+            <div class="box mobile-scroll">
+                <h1><span>Interactive Market Chart</span></h1>
+                <div class="tradingview-widget-container">
+                    <div id="tradingview_chart"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crypto Calculator Section -->
+    <section id="crypto-calculator" class="mobile-scroll content-section">
+        <div class="projects-header">
+            <h1 class="header mobile-scroll"><span>Crypto Calculator</span></h1>
+        </div>
+        <div class="projects-container">
+            <div class="box mobile-scroll">
+                <h1><span>Convert Cryptocurrency</span></h1>
+                <div class="calculator-container">
+                    <div class="calculator-inputs">
+                        <div class="input-group">
+                            <label for="crypto-search"><span>Cryptocurrency</span></label>
+                            <input type="text" id="crypto-search" placeholder="Search for a cryptocurrency (e.g., Bitcoin)">
+                            <ul id="crypto-suggestions" class="suggestions-list"></ul>
+                        </div>
+                        <div class="input-group">
+                            <label for="crypto-amount"><span>Amount</span></label>
+                            <input type="number" id="crypto-amount" placeholder="e.g., 0.0001" step="0.00000001" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="currency-select"><span>Currency</span></label>
+                            <select id="currency-select">
+                                <option value="usd">USD</option>
+                                <option value="eur">EUR</option>
+                                <option value="gbp">GBP</option>
+                                <option value="jpy">JPY</option>
+                                <option value="aud">AUD</option>
+                                <option value="ngn">NGN</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <button id="calculate-btn" class="btn">Calculate <i class='bx bx-calculator'></i></button>
+                    <div id="calculator-result" class="calculator-result"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chatbot Section -->
+    <section id="ai-chatbot" class="content-section">
+        <div class="projects-header">
+            <h1 class="header"><span>Ask Skye AI</span></h1>
+        </div>
+        <div class="chatbot-container">
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">Hi! I'm Skye AI. Ask me anything about UI/UX, crypto, or the latest news!</div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your question..." />
+                <button class="btn chatbot-send"><i class='bx bxs-send'></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mobile-scroll">
+        <div class="col-left">
+            <div class="col-box">
+                <span><i class='bx bx-location-plus'></i></span>
+                <span>Lagos, Nigeria.</span>
+            </div>
+            <div class="col-box">
+                <span><i class='bx bx-phone'></i></span>
+                <span>+234 701 679 4490</span>
+            </div>
+            <div class="col-box">
+                <span><i class='bx bx-envelope'></i></span>
+                <span>skyedesignssd@gmail.com</span>
+            </div>
+        </div>
+        <div class="col-right">
+            <div class="social-icons">
+                <a href="https://www.linkedin.com/in/skyedesignssd/" target="_blank" rel="noopener noreferrer"><span><i class='bx bxl-linkedin'></i></span></a>
+                <a href="https://www.instagram.com/skye_uiux/" target="_blank" rel="noopener noreferrer"><span><i class='bx bxl-instagram'></i></span></a>
+                <a href="https://web.facebook.com/profile.php?id=61556846283257" target="_blank" rel="noopener noreferrer"><span><i class='bx bxl-facebook'></i></span></a>
+                <a href="https://github.com/Dandesignshub" target="_blank" rel="noopener noreferrer"><span><i class='bx bxl-github'></i></span></a>
+            </div>
+        </div>
+        <div class="copyright">
+            <span>© All rights reserved <strong>skyedesigns</strong> 2025</span>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script src="crypto-calculator.js"></script>
+</body>
+</html>
