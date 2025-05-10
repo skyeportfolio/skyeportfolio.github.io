@@ -481,6 +481,7 @@ section {
     padding-top: 4em;
     background-color: var(--background);
     margin-top: 1em;
+    min-height: 100vh; /* Full viewport height */
 }
 
 #home .profile-img {
@@ -1317,6 +1318,9 @@ body.dark-mode #crypto-news .refresh-link {
     max-width: 100%;
     overflow: hidden;
 }
+#crypto-charts .box h1 {
+    text-align: center;
+}
 
 #crypto-charts .tradingview-widget-container {
     width: 100%;
@@ -1702,15 +1706,20 @@ body.dark-mode #crypto-calculator .calculator-result {
     background: none;
     -webkit-background-clip: initial;
 }
-
-
-
-
-/* Global Styles (outside media queries) */
 #crypto-charts .header {
     text-align: center;
     margin: 0 auto;
 }
+form input, form textarea, #ai-chatbot .chatbot-input input {
+    -webkit-user-select: text;
+    user-select: text;
+    touch-action: manipulation;
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+}
+
+
 
 /* Media Queries for Desktop View */
 @media (min-width: 969px) {
@@ -1826,6 +1835,7 @@ body.dark-mode #crypto-calculator .calculator-result {
         margin-top: 0.5em;
         margin-bottom: 0.2em;
         gap: 1em;
+        min-height: 100vh; /* Full viewport height */
     }
 
     .info-box {
@@ -2082,6 +2092,26 @@ body.dark-mode #crypto-calculator .calculator-result {
     .slide-right.visible {
         animation: slideInRight 0.6s ease-out forwards;
     }
+    #crypto-charts .box h1 {
+        font-size: 0.9rem;
+    }
+    form input, form textarea, #ai-chatbot .chatbot-input input {
+        touch-action: auto;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    #ai-chatbot .chatbot-input input {
+        font-size: 0.85rem;
+        padding: 8px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    form, #ai-chatbot .chatbot-input {
+        position: relative;
+        z-index: 2;
+    }
 }
 
 @media (max-width: 768px) {
@@ -2158,7 +2188,7 @@ body.dark-mode #crypto-calculator .calculator-result {
     #crypto-charts .tradingview-widget-container {
         width: 100%;
         max-width: 100%;
-        height: 400px;
+        height: 500px;
         min-height: 250px;
         padding: 10px;
         margin: 0 auto;
@@ -2185,6 +2215,7 @@ body.dark-mode #crypto-calculator .calculator-result {
         padding-top: 6em;
         margin-top: 0.4em;
         gap: 1em;
+        min-height: 100vh;
     }
 
     .info-box {
