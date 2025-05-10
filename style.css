@@ -1830,6 +1830,7 @@ body.dark-mode #crypto-calculator .calculator-result {
         margin-top: 0.5em;
         margin-bottom: 0.2em;
         gap: 1em;
+        min-height: 100vh;
     }
 
     .info-box {
@@ -2189,6 +2190,7 @@ body.dark-mode #crypto-calculator .calculator-result {
         padding-top: 6em;
         margin-top: 0.4em;
         gap: 1em;
+        min-height: 100vh;
     }
 
     .info-box {
