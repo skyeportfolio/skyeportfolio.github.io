@@ -719,3 +719,30 @@ document.addEventListener('DOMContentLoaded', () => {
         window.dispatchEvent(new Event('resize'));
     });
 });
+
+// Ensure textboxes remain responsive on mobile
+document.querySelectorAll('input, textarea').forEach(element => {
+    element.addEventListener('touchstart', (e) => {
+        e.stopPropagation();
+        element.focus();
+    }, { passive: false });
+
+    element.addEventListener('touchend', (e) => {
+        e.stopPropagation();
+    }, { passive: false });
+
+    element.addEventListener('focus', () => {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+});
+
+// Prevent default touch behavior on form and chatbot container to avoid unresponsiveness
+document.querySelectorAll('form, #ai-chatbot .chatbot-input').forEach(container => {
+    container.addEventListener('touchstart', (e) => {
+        e.stopPropagation();
+    }, { passive: false });
+
+    container.addEventListener('touchmove', (e) => {
+        e.stopPropagation();
+    }, { passive: false });
+});
