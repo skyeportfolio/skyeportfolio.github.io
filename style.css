@@ -1826,14 +1826,15 @@ body.dark-mode #crypto-calculator .calculator-result {
     }
 
     #home {
-        padding-top: 4em; /* Reduced padding to move content closer to nav */
+        padding-top: 5em; /* Increased padding to add space below nav */
         margin-top: 0.2em;
         margin-bottom: 0.2em;
         gap: 2em;
-        min-height: 85vh;
-        justify-content: center; /* Changed to flex-start to align content at the top */
+        min-height: 90vh; /* Increased min-height to push next section out of view */
+        justify-content: center;
         align-items: center;
     }
+
     .info-box {
         padding-left: 1em;
         padding-right: 1em;
@@ -1850,6 +1851,7 @@ body.dark-mode #crypto-calculator .calculator-result {
     #home .profile-img {
         width: 50vw;
         max-width: 250px;
+        margin-top: 1em; /* Added margin to ensure profile image isn't too close to nav */
     }
     .btn-box {
         margin-top: 1em;
@@ -2198,10 +2200,12 @@ body.dark-mode #crypto-calculator .calculator-result {
     }
 
     #home {
-        padding-top: 3em; /* Further reduced padding for smaller screens */
+        padding-top: 4em; /* Slightly increased padding for smaller screens */
         gap: 1.5em;
-        justify-content: center; /* Ensure content starts at the top */
+        min-height: 95vh; /* Further increased min-height for smaller screens */
+        justify-content: center;
     }
+
     .info-box {
         gap: 0.8em;
     }
@@ -2214,6 +2218,7 @@ body.dark-mode #crypto-calculator .calculator-result {
     #home .profile-img {
         width: 60vw;
         max-width: 200px;
+        margin-top: 1em; /* Consistent margin for smaller screens */
     }
     .info-box h1 {
         font-size: clamp(1.8em, 6vw, 2em);
