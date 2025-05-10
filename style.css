@@ -1826,15 +1826,14 @@ body.dark-mode #crypto-calculator .calculator-result {
     }
 
     #home {
-        padding-top: 6.5em;
-        margin-top: 0.5em;
+        padding-top: 4em; /* Reduced padding to move content closer to nav */
+        margin-top: 0.2em;
         margin-bottom: 0.2em;
         gap: 2em;
         min-height: 70vh;
-        justify-content: center;
+        justify-content: center; /* Changed to flex-start to align content at the top */
         align-items: center;
     }
-
     .info-box {
         padding-left: 1em;
         padding-right: 1em;
@@ -2199,10 +2198,10 @@ body.dark-mode #crypto-calculator .calculator-result {
     }
 
     #home {
-        padding-top: 6em;
+        padding-top: 3em; /* Further reduced padding for smaller screens */
         gap: 1.5em;
+        justify-content: center; /* Ensure content starts at the top */
     }
-
     .info-box {
         gap: 0.8em;
     }
