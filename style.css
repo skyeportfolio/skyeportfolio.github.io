@@ -2198,7 +2198,7 @@ body.dark-mode #crypto-calculator .calculator-result {
     }
 
     #home {
-        padding-top: 2.5em; /* Further reduced padding for smaller screens */
+        padding-top: 3em; /* Further reduced padding for smaller screens */
         gap: 1.5em;
         justify-content: center; /* Ensure content starts at the top */
     }
