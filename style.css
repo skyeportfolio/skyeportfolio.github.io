@@ -481,7 +481,7 @@ section {
     padding-top: 4em;
     background-color: var(--background);
     margin-top: 1em;
-    min-height: 100vh; /* Full viewport height */
+/*     min-height: 100vh;  */
 }
 
 #home .profile-img {
@@ -1835,7 +1835,7 @@ form input, form textarea, #ai-chatbot .chatbot-input input {
         margin-top: 0.5em;
         margin-bottom: 0.2em;
         gap: 0.6em; /* Reduced from 1em to tighten spacing */
-        min-height: 100vh; /* Keep for full viewport height */
+/*         min-height: 100vh;  */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -2219,7 +2219,7 @@ form input, form textarea, #ai-chatbot .chatbot-input input {
         padding-top: 4em; /* Further reduced from 4.5em */
         margin-top: 0.4em;
         gap: 0.5em; /* Further reduced for smaller screens */
-        min-height: 100vh;
+/*         min-height: 100vh; */
     }
 
     .info-box {
