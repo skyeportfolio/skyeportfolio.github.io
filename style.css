@@ -1826,7 +1826,7 @@ body.dark-mode #crypto-calculator .calculator-result {
     }
 
     #home {
-        padding-top: 3em; /* Reduced padding to move content closer to nav */
+        padding-top: 4em; /* Reduced padding to move content closer to nav */
         margin-top: 0.2em;
         margin-bottom: 0.2em;
         gap: 2em;
