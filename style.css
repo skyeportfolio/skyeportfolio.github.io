@@ -1829,17 +1829,29 @@ body.dark-mode #crypto-calculator .calculator-result {
         padding-top: 6.5em;
         margin-top: 0.5em;
         margin-bottom: 0.2em;
-        gap: 1em;
-        min-height: 100vh;
+        gap: 2em;
+        min-height: 70vh;
+        justify-content: center;
+        align-items: center;
     }
 
     .info-box {
         padding-left: 1em;
         padding-right: 1em;
         max-width: 100%;
-        gap: 0.5em;
+        gap: 1em;
+        align-items: center;
     }
 
+    .btn-box {
+        margin-top: 1.5em;
+        gap: 1.5em;
+    }
+
+    #home .profile-img {
+        width: 50vw;
+        max-width: 250px;
+    }
     .btn-box {
         margin-top: 1em;
     }
@@ -2188,30 +2200,28 @@ body.dark-mode #crypto-calculator .calculator-result {
 
     #home {
         padding-top: 6em;
-        margin-top: 0.4em;
-        gap: 1em;
-        min-height: 100vh;
+        gap: 1.5em;
     }
 
     .info-box {
-        gap: 0.5em;
+        gap: 0.8em;
     }
 
     .btn-box {
-        margin-top: 1em;
+        margin-top: 1.2em;
+        gap: 1.2em;
     }
 
+    #home .profile-img {
+        width: 60vw;
+        max-width: 200px;
+    }
     .info-box h1 {
         font-size: clamp(1.8em, 6vw, 2em);
     }
 
     .info-box h3 {
         font-size: 0.95em;
-    }
-
-    #home .profile-img {
-        width: 50vw;
-        max-width: 200px;
     }
 
     #about {
