@@ -1831,24 +1831,28 @@ form input, form textarea, #ai-chatbot .chatbot-input input {
     }
 
     #home {
-        padding-top: 6.5em;
+        padding-top: 4.5em; /* Reduced from 6.5em to bring content up */
         margin-top: 0.5em;
         margin-bottom: 0.2em;
-        gap: 1em;
-        min-height: 100vh; /* Full viewport height */
+        gap: 0.6em; /* Reduced from 1em to tighten spacing */
+        min-height: 100vh; /* Keep for full viewport height */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
     }
 
     .info-box {
         padding-left: 1em;
         padding-right: 1em;
         max-width: 100%;
-        gap: 0.5em;
+        gap: 0.3em; /* Reduced from 0.5em for tighter spacing */
     }
 
     .btn-box {
-        margin-top: 1em;
+        margin-top: 0.8em; /* Reduced from 1em */
     }
-
     #about {
         padding: 1em 5%;
         padding-top: 4em;
@@ -2212,18 +2216,14 @@ form input, form textarea, #ai-chatbot .chatbot-input input {
     }
 
     #home {
-        padding-top: 6em;
+        padding-top: 4em; /* Further reduced from 4.5em */
         margin-top: 0.4em;
-        gap: 1em;
+        gap: 0.5em; /* Further reduced for smaller screens */
         min-height: 100vh;
     }
 
     .info-box {
-        gap: 0.5em;
-    }
-
-    .btn-box {
-        margin-top: 1em;
+        gap: 0.25em; /* Even tighter for small screens */
     }
 
     .info-box h1 {
@@ -2232,6 +2232,15 @@ form input, form textarea, #ai-chatbot .chatbot-input input {
 
     .info-box h3 {
         font-size: 0.95em;
+    }
+
+    #home .profile-img {
+        width: 50vw;
+        max-width: 200px;
+    }
+
+    .btn-box {
+        margin-top: 0.6em; /* Further reduced */
     }
 
     #home .profile-img {
