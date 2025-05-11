@@ -1334,15 +1334,6 @@ body.dark-mode #crypto-news .refresh-link {
     z-index: 1;
 }
 
-form textarea {
-    -webkit-user-select: text;
-    user-select: text;
-    touch-action: manipulation;
-    pointer-events: auto;
-    position: relative;
-    z-index: 2;
-}
-
 .contact-intro {
     font-size: clamp(1em, 2.5vw, 1.125em);
     font-weight: 200;
@@ -1370,7 +1361,7 @@ form {
     width: 50%;
 }
 
-form input, form textarea {
+form input, form textarea, #ai-chatbot .chatbot-input input {
     font-size: 1em;
     padding: 0.6em 1.2em;
     border: none;
@@ -1379,19 +1370,32 @@ form input, form textarea {
     resize: vertical;
     background: #e0e0e0;
     transition: background 0.3s ease;
+    touch-action: auto; /* Merged: Better for mobile */
+    -webkit-user-select: text; /* Merged */
+    user-select: text; /* Merged */
+    -webkit-appearance: none; /* Merged: Remove default styling */
+    appearance: none; /* Merged */
+    box-sizing: border-box; /* Merged */
+    width: 100%; /* Merged: Full width */
+    z-index: 10; /* Merged: Higher than z-index: 2 */
+    pointer-events: auto; /* From form textarea */
+    position: relative; /* From form textarea */
 }
 
-body.dark-mode form input, body.dark-mode form textarea {
+body.dark-mode form input, body.dark-mode form textarea, body.dark-mode #ai-chatbot .chatbot-input input {
     background: #4A5568;
     color: #FFFFFF;
 }
 
-form input:focus, form textarea:focus {
+form input:focus, form textarea:focus, #ai-chatbot .chatbot-input input:focus {
     background: #e5e5e5;
+    border: 2px solid var(--primary-color); /* Merged: New border */
+    z-index: 10; /* Merged */
 }
 
-body.dark-mode form input:focus, body.dark-mode form textarea:focus {
+body.dark-mode form input:focus, body.dark-mode form textarea:focus, body.dark-mode #ai-chatbot .chatbot-input input:focus {
     background: #5A6A7A;
+    border: 2px solid #FFFFFF; /* Merged: New border */
 }
 
 /* Footer */
@@ -1541,6 +1545,7 @@ body.dark-mode .cta-button:focus {
 .cta-button i {
     font-size: 1.2em;
 }
+
 /* Crypto Calculator Section */
 #crypto-calculator .calculator-container {
     display: flex;
@@ -1703,9 +1708,6 @@ body.dark-mode #crypto-calculator .calculator-result {
     -webkit-background-clip: initial;
 }
 
-
-
-
 /* Global Styles (outside media queries) */
 #crypto-charts .header {
     text-align: center;
@@ -1754,9 +1756,11 @@ body.dark-mode #crypto-calculator .calculator-result {
         animation: slideInRight 0.6s ease-out forwards;
     }
 }
+
 #crypto-charts .box h1 {
     text-align: center;
 }
+
 /* Media Queries for Mobile View */
 @media (max-width: 968px) {
     nav {
@@ -1771,9 +1775,11 @@ body.dark-mode #crypto-calculator .calculator-result {
     .nav-right {
         display: none;
     }
+
     #crypto-charts .box h1 {
         font-size: 0.9rem;
     }
+
     .menu-toggle {
         display: block;
     }
@@ -1826,11 +1832,11 @@ body.dark-mode #crypto-calculator .calculator-result {
     }
 
     #home {
-        padding-top: 5em; /* Increased padding to add space below nav */
+        padding-top: 5em;
         margin-top: 0.2em;
         margin-bottom: 0.2em;
         gap: 2em;
-        min-height: 90vh; /* Increased min-height to push next section out of view */
+        min-height: 80vh;
         justify-content: center;
         align-items: center;
     }
@@ -1851,8 +1857,9 @@ body.dark-mode #crypto-calculator .calculator-result {
     #home .profile-img {
         width: 50vw;
         max-width: 250px;
-        margin-top: 1em; /* Added margin to ensure profile image isn't too close to nav */
+        margin-top: 1em;
     }
+
     .btn-box {
         margin-top: 1em;
     }
@@ -1863,9 +1870,11 @@ body.dark-mode #crypto-calculator .calculator-result {
         margin-top: 0.5em;
         margin-bottom: 0.2em;
     }
+
     body:not(.index-page) #about {
         padding-top: 7em;
     }
+
     #about .header {
         margin-top: -1.5em;
     }
@@ -2068,9 +2077,17 @@ body.dark-mode #crypto-calculator .calculator-result {
         max-width: 400px;
     }
 
-    form input, form textarea {
+    form input, form textarea, #ai-chatbot .chatbot-input input {
         padding: 0.5em 1em;
         font-size: 0.95em;
+        touch-action: auto; /* Merged */
+        -webkit-user-select: text; /* Merged */
+        user-select: text; /* Merged */
+        -webkit-appearance: none; /* Merged */
+        appearance: none; /* Merged */
+        box-sizing: border-box; /* Merged */
+        width: 100%; /* Merged */
+        z-index: 10; /* Merged */
     }
 
     form textarea {
@@ -2125,6 +2142,14 @@ body.dark-mode #crypto-calculator .calculator-result {
 
     #ai-chatbot .chatbot-input input {
         padding: 10px;
+        touch-action: auto; /* Merged */
+        -webkit-user-select: text; /* Merged */
+        user-select: text; /* Merged */
+        -webkit-appearance: none; /* Merged */
+        appearance: none; /* Merged */
+        box-sizing: border-box; /* Merged */
+        width: 100%; /* Merged */
+        z-index: 10; /* Merged */
     }
 
     #ai-chatbot .chatbot-send {
@@ -2200,9 +2225,9 @@ body.dark-mode #crypto-calculator .calculator-result {
     }
 
     #home {
-        padding-top: 4em; /* Slightly increased padding for smaller screens */
+        padding-top: 4em;
         gap: 1.5em;
-        min-height: 95vh; /* Further increased min-height for smaller screens */
+        min-height: 75vh;
         justify-content: center;
     }
 
@@ -2218,8 +2243,9 @@ body.dark-mode #crypto-calculator .calculator-result {
     #home .profile-img {
         width: 60vw;
         max-width: 200px;
-        margin-top: 1em; /* Consistent margin for smaller screens */
+        margin-top: 1em;
     }
+
     .info-box h1 {
         font-size: clamp(1.8em, 6vw, 2em);
     }
@@ -2379,13 +2405,16 @@ body.dark-mode #crypto-calculator .calculator-result {
         max-height: 200px;
     }
 
-    #ai-chatbot .message {
-        font-size: 0.8rem;
-        padding: 6px 10px;
-    }
-
     #ai-chatbot .chatbot-input input {
         padding: 8px;
+        touch-action: auto; /* Merged */
+        -webkit-user-select: text; /* Merged */
+        user-select: text; /* Merged */
+        -webkit-appearance: none; /* Merged */
+        appearance: none; /* Merged */
+        box-sizing: border-box; /* Merged */
+        width: 100%; /* Merged */
+        z-index: 10; /* Merged */
     }
 
     #ai-chatbot .chatbot-send {
@@ -2402,9 +2431,17 @@ body.dark-mode #crypto-calculator .calculator-result {
         max-width: 280px;
     }
 
-    form input, form textarea {
+    form input, form textarea, #ai-chatbot .chatbot-input input {
         padding: 0.4em 0.8em;
         font-size: 0.9em;
+        touch-action: auto; /* Merged */
+        -webkit-user-select: text; /* Merged */
+        user-select: text; /* Merged */
+        -webkit-appearance: none; /* Merged */
+        appearance: none; /* Merged */
+        box-sizing: border-box; /* Merged */
+        width: 100%; /* Merged */
+        z-index: 10; /* Merged */
     }
 
     #crypto-calculator .calculator-container {
@@ -2438,6 +2475,11 @@ body.dark-mode #crypto-calculator .calculator-result {
 
     #crypto-news .projects-container {
         grid-template-columns: 1fr;
+    }
+
+    /* Prevent zoom on input focus for smaller screens */
+    input, textarea {
+        font-size: 16px; /* Merged: Prevent iOS zoom */
     }
 }
 
