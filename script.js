@@ -477,65 +477,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Optimized scroll animation with expanded elements
+// Optimized scroll animation for all devices
+function setupScrollAnimations() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isMobile = window.innerWidth <= 968 || window.matchMedia('(max-device-width: 968px)').matches;
-    if (!prefersReducedMotion && 'IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    requestAnimationFrame(() => {
-                        entry.target.classList.add('visible');
-                    });
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: isMobile ? 0.05 : 0.1,
-            rootMargin: isMobile ? '0px 0px -10% 0px' : '0px 0px -20% 0px'
-        });
-
-        window.updateObservers = () => {
-            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img').forEach(el => {
-                observer.unobserve(el);
-            });
-
-            document.querySelectorAll('.mobile-scroll').forEach(el => {
-                observer.observe(el);
-            });
-
-            document.querySelectorAll('.focus-section').forEach(el => {
-                el.classList.add('slide-left');
-                observer.observe(el);
-            });
-
-            document.querySelectorAll('.skills-progress').forEach(el => {
-                el.classList.add('slide-right');
-                observer.observe(el);
-            });
-
-            document.querySelectorAll('.scroll-reveal').forEach(el => {
-                observer.observe(el);
-            });
-
-            document.querySelectorAll('#home .profile-img').forEach(el => {
-                observer.observe(el);
-            });
-        };
-
-        updateObservers();
-
-        window.addEventListener('resize', () => {
-            updateObservers();
-        });
-
-        window.addEventListener('load', () => {
-            updateObservers();
-        });
-    } else {
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+        // Fallback: Show all elements without animation
         document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img').forEach(el => {
             el.classList.add('visible');
         });
+        return;
     }
+
+    const isMobile = window.innerWidth <= 968 || window.matchMedia('(max-device-width: 968px)').matches;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                requestAnimationFrame(() => {
+                    entry.target.classList.add('visible');
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: isMobile ? 0.1 : 0.15, // Adjusted for mobile reliability
+        rootMargin: isMobile ? '0px 0px -15% 0px' : '0px 0px -25% 0px' // Tighter margin for mobile
+    });
+
+    window.updateObservers = () => {
+        // Unobserve all to prevent duplicate observations
+        document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img').forEach(el => {
+            observer.unobserve(el);
+        });
+
+        // Observe animation elements
+        document.querySelectorAll('.mobile-scroll').forEach(el => observer.observe(el));
+        document.querySelectorAll('.focus-section').forEach(el => {
+            el.classList.add('slide-left');
+            observer.observe(el);
+        });
+        document.querySelectorAll('.skills-progress').forEach(el => {
+            el.classList.add('slide-right');
+            observer.observe(el);
+        });
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('#home .profile-img').forEach(el => observer.observe(el));
+    };
+
+    window.updateObservers();
+}
+
+// Initialize animations
+setupScrollAnimations();
+
+// Re-observe on resize or load
+window.addEventListener('resize', window.updateObservers);
+window.addEventListener('load', window.updateObservers);
 
     // Touch focus for textarea
     document.querySelectorAll('textarea').forEach(textarea => {
@@ -721,21 +717,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Ensure textboxes remain responsive on mobile
+// Enhanced touch handling for textboxes
 document.querySelectorAll('input, textarea').forEach(element => {
     element.addEventListener('touchstart', (e) => {
-        e.stopPropagation();
-        element.focus();
+        e.preventDefault(); // Prevent default to avoid conflicts
+        element.focus(); // Programmatically focus
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Ensure visibility
     }, { passive: false });
 
     element.addEventListener('touchend', (e) => {
-        e.stopPropagation();
+        e.preventDefault(); // Prevent unwanted bubbling
     }, { passive: false });
 
     element.addEventListener('focus', () => {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.style.position = 'relative'; // Ensure proper stacking
+        element.style.zIndex = '100'; // Bring to front
+    });
+
+    element.addEventListener('blur', () => {
+        element.style.position = ''; // Reset position
+        element.style.zIndex = ''; // Reset z-index
     });
 });
-
 // Prevent default touch behavior on form and chatbot container to avoid unresponsiveness
 document.querySelectorAll('form, #ai-chatbot .chatbot-input').forEach(container => {
     container.addEventListener('touchstart', (e) => {
