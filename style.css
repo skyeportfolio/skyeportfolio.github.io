@@ -1714,6 +1714,18 @@ body.dark-mode #crypto-calculator .calculator-result {
     margin: 0 auto;
 }
 
+/* Enhance textbox responsiveness on mobile */
+input, textarea {
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
+    touch-action: manipulation; /* Prevent pinch-zoom */
+    z-index: 100; /* Ensure above other elements */
+}
+
+/* Prevent form and chatbot container from capturing unwanted touch events */
+form, #ai-chatbot .chatbot-input {
+    touch-action: auto;
+}
+
 /* Media Queries for Desktop View */
 @media (min-width: 969px) {
     .menu-toggle {
