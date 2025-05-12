@@ -1708,22 +1708,46 @@ body.dark-mode #crypto-calculator .calculator-result {
     -webkit-background-clip: initial;
 }
 
+/* Enhance textbox responsiveness on iOS */
+input, textarea {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    z-index: 100; /* Ensure above other elements */
+    -webkit-user-select: text;
+    user-select: text;
+    font-size: 16px; /* Prevent iOS zoom */
+    cursor: text; /* Ensure tappable appearance */
+}
+
+/* Ensure form and chatbot container allow touch events */
+form, #ai-chatbot .chatbot-input {
+    touch-action: auto;
+    z-index: 100; /* Match input z-index */
+    position: relative; /* Ensure stacking context */
+}
+
+/* Prevent overlapping elements from blocking inputs */
+#ai-chatbot .chatbot-container, form {
+    pointer-events: auto;
+}
+
+/* Fix focus states for iOS */
+form input:focus, form textarea:focus, #ai-chatbot .chatbot-input input:focus {
+    z-index: 101; /* Higher during focus */
+    outline: none;
+    border: 2px solid var(--primary-color);
+    background: #e5e5e5;
+}
+
+body.dark-mode form input:focus, body.dark-mode form textarea:focus, body.dark-mode #ai-chatbot .chatbot-input input:focus {
+    border: 2px solid #FFFFFF;
+    background: #5A6A7A;
+}
+
 /* Global Styles (outside media queries) */
 #crypto-charts .header {
     text-align: center;
     margin: 0 auto;
-}
-
-/* Enhance textbox responsiveness on mobile */
-input, textarea {
-    -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
-    touch-action: manipulation; /* Prevent pinch-zoom */
-    z-index: 100; /* Ensure above other elements */
-}
-
-/* Prevent form and chatbot container from capturing unwanted touch events */
-form, #ai-chatbot .chatbot-input {
-    touch-action: auto;
 }
 
 /* Media Queries for Desktop View */
