@@ -242,6 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
             updateObservers(); // Ensure new elements are observed for animations
         }
 
+        // Override renderItems to ensure animations
+        const originalRenderItems = window.renderItems;
+        window.renderItems = function(items, container) {
+            originalRenderItems(items, container);
+            requestAnimationFrame(() => window.updateObservers()); // Re-observe new elements
+        };
+
         // Fetch crypto and general news
         async function fetchNewsData() {
             console.log('Starting fetchNewsData...');
@@ -476,62 +483,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Optimized scroll animation with expanded elements
-// Optimized scroll animation for all devices
-function setupScrollAnimations() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-        // Fallback: Show all elements without animation
-        document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img').forEach(el => {
-            el.classList.add('visible');
+    // Optimized scroll animation for all devices
+    function setupScrollAnimations() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+            // Fallback: Show all elements without animation
+            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link').forEach(el => {
+                el.classList.add('visible');
+            });
+            return;
+        }
+
+        const isMobile = window.innerWidth <= 968 || window.matchMedia('(max-device-width: 968px)').matches;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    requestAnimationFrame(() => {
+                        entry.target.classList.add('visible');
+                    });
+                    observer.unobserve(entry.target); // Unobserve to prevent repeat triggers
+                }
+            });
+        }, {
+            threshold: isMobile ? 0.05 : 0.1, // Lower threshold for mobile to trigger earlier
+            rootMargin: isMobile ? '0px 0px -10% 0px' : '0px 0px -20% 0px' // Adjusted for mobile
         });
-        return;
+
+        window.updateObservers = () => {
+            // Unobserve all to prevent duplicate observations
+            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link').forEach(el => {
+                observer.unobserve(el);
+            });
+
+            // Observe all animation elements
+            document.querySelectorAll('.mobile-scroll').forEach(el => observer.observe(el));
+            document.querySelectorAll('.focus-section').forEach(el => {
+                el.classList.add('slide-left');
+                observer.observe(el);
+            });
+            document.querySelectorAll('.skills-progress').forEach(el => {
+                el.classList.add('slide-right');
+                observer.observe(el);
+            });
+            document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+            document.querySelectorAll('#home .profile-img').forEach(el => observer.observe(el));
+            document.querySelectorAll('.box, .blog-link').forEach(el => observer.observe(el)); // Include dynamic news items
+        };
+
+        window.updateObservers();
     }
 
-    const isMobile = window.innerWidth <= 968 || window.matchMedia('(max-device-width: 968px)').matches;
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                requestAnimationFrame(() => {
-                    entry.target.classList.add('visible');
-                });
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: isMobile ? 0.1 : 0.15, // Adjusted for mobile reliability
-        rootMargin: isMobile ? '0px 0px -15% 0px' : '0px 0px -25% 0px' // Tighter margin for mobile
+    // Initialize animations
+    setupScrollAnimations();
+
+    // Re-observe on resize, load, or dynamic content updates
+    window.addEventListener('resize', () => {
+        requestAnimationFrame(() => window.updateObservers());
     });
-
-    window.updateObservers = () => {
-        // Unobserve all to prevent duplicate observations
-        document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img').forEach(el => {
-            observer.unobserve(el);
-        });
-
-        // Observe animation elements
-        document.querySelectorAll('.mobile-scroll').forEach(el => observer.observe(el));
-        document.querySelectorAll('.focus-section').forEach(el => {
-            el.classList.add('slide-left');
-            observer.observe(el);
-        });
-        document.querySelectorAll('.skills-progress').forEach(el => {
-            el.classList.add('slide-right');
-            observer.observe(el);
-        });
-        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-        document.querySelectorAll('#home .profile-img').forEach(el => observer.observe(el));
-    };
-
-    window.updateObservers();
-}
-
-// Initialize animations
-setupScrollAnimations();
-
-// Re-observe on resize or load
-window.addEventListener('resize', window.updateObservers);
-window.addEventListener('load', window.updateObservers);
+    window.addEventListener('load', () => {
+        requestAnimationFrame(() => window.updateObservers());
+    });
 
     // Touch focus for textarea
     document.querySelectorAll('textarea').forEach(textarea => {
@@ -716,36 +727,37 @@ window.addEventListener('load', window.updateObservers);
     });
 });
 
-// Ensure textboxes remain responsive on mobile
-// Enhanced touch handling for textboxes
+// Enhanced touch and click handling for textboxes
 document.querySelectorAll('input, textarea').forEach(element => {
+    // Handle touchstart for iOS compatibility
     element.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Prevent default to avoid conflicts
+        e.stopPropagation(); // Prevent bubbling to parent elements
         element.focus(); // Programmatically focus
         element.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Ensure visibility
-    }, { passive: false });
+    }, { passive: true }); // Allow default scrolling
 
-    element.addEventListener('touchend', (e) => {
-        e.preventDefault(); // Prevent unwanted bubbling
-    }, { passive: false });
-
-    element.addEventListener('focus', () => {
-        element.style.position = 'relative'; // Ensure proper stacking
-        element.style.zIndex = '100'; // Bring to front
+    // Fallback click event for Safari
+    element.addEventListener('click', (e) => {
+        e.stopPropagation();
+        element.focus();
     });
 
+    // Ensure focus state is prioritized
+    element.addEventListener('focus', () => {
+        element.style.zIndex = '101'; // Bring to front during focus
+        element.style.position = 'relative';
+    });
+
+    // Reset on blur
     element.addEventListener('blur', () => {
-        element.style.position = ''; // Reset position
-        element.style.zIndex = ''; // Reset z-index
+        element.style.zIndex = '100'; // Reset z-index
+        element.style.position = '';
     });
 });
-// Prevent default touch behavior on form and chatbot container to avoid unresponsiveness
+
+// Prevent parent containers from blocking touch events
 document.querySelectorAll('form, #ai-chatbot .chatbot-input').forEach(container => {
     container.addEventListener('touchstart', (e) => {
-        e.stopPropagation();
-    }, { passive: false });
-
-    container.addEventListener('touchmove', (e) => {
-        e.stopPropagation();
-    }, { passive: false });
+        e.stopPropagation(); // Allow touch to reach input
+    }, { passive: true });
 });
