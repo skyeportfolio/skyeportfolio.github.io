@@ -101,6 +101,10 @@ body {
     min-height: 100vh;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+body.menu-open {
+    overflow: hidden;
+    touch-action: none;
+  }
 
 /* Gradient Text */
 span, .about-info p, .skills ul, .author-info h3, .cta-heading, .marquee, .faq-intro, .contact-intro {
