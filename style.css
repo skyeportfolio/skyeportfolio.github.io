@@ -78,7 +78,7 @@
 }
 
 :root {
-    --background: #F3F3F3;
+    --background: #f8fafc;
     --second-background: #CACACA;
     --primary-color: #001b60;
     --dark-color: #01031d;
@@ -1868,12 +1868,11 @@ body.dark-mode form input:focus, body.dark-mode form textarea:focus, body.dark-m
     }
 
     #home {
-        padding-top: 5em;
-        margin-top: 0.2em;
-        margin-bottom: 0.2em;
-        gap: 2em;
+        padding-top: 3em; /* Reduced from 5em to move content up */
+        margin-top: 0; /* Remove margin-top to shift content up */
+        gap: 1.5em;
         min-height: 80vh;
-        justify-content: center;
+        justify-content: flex-start; /* Changed from center to start to align content higher */
         align-items: center;
     }
 
@@ -1881,19 +1880,20 @@ body.dark-mode form input:focus, body.dark-mode form textarea:focus, body.dark-m
         padding-left: 1em;
         padding-right: 1em;
         max-width: 100%;
-        gap: 1em;
+        gap: 0.8em; /* Slightly reduced gap to tighten spacing */
         align-items: center;
+        margin-top: 0; /* Ensure no extra top margin */
     }
 
     .btn-box {
-        margin-top: 1.5em;
+        margin-top: 1em;
         gap: 1.5em;
     }
 
     #home .profile-img {
         width: 50vw;
         max-width: 250px;
-        margin-top: 1em;
+        margin-top: 0.5em; /* Reduced from 1em to move image up */
     }
 
     .btn-box {
