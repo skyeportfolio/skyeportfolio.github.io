@@ -486,53 +486,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Optimized scroll animation for all devices
     function setupScrollAnimations() {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-            // Fallback: Show all elements without animation
-            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link').forEach(el => {
-                el.classList.add('visible');
-            });
+        const supportsObserver = 'IntersectionObserver' in window;
+    
+        if (prefersReducedMotion || !supportsObserver) {
+            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link')
+                .forEach(el => el.classList.add('visible'));
             return;
         }
-
-        const isMobile = window.innerWidth <= 968 || window.matchMedia('(max-device-width: 968px)').matches;
+    
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    requestAnimationFrame(() => {
-                        entry.target.classList.add('visible');
-                    });
-                    observer.unobserve(entry.target); // Unobserve to prevent repeat triggers
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible'); // Remove when out of view
                 }
             });
         }, {
-            threshold: isMobile ? 0.05 : 0.1, // Lower threshold for mobile to trigger earlier
-            rootMargin: isMobile ? '0px 0px -10% 0px' : '0px 0px -20% 0px' // Adjusted for mobile
+            threshold: 0.1,
+            rootMargin: '0px 0px -10% 0px'
         });
-
+    
+        window.scrollObserver = observer;
+    
         window.updateObservers = () => {
-            // Unobserve all to prevent duplicate observations
-            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link').forEach(el => {
-                observer.unobserve(el);
-            });
-
-            // Observe all animation elements
-            document.querySelectorAll('.mobile-scroll').forEach(el => observer.observe(el));
-            document.querySelectorAll('.focus-section').forEach(el => {
-                el.classList.add('slide-left');
-                observer.observe(el);
-            });
-            document.querySelectorAll('.skills-progress').forEach(el => {
-                el.classList.add('slide-right');
-                observer.observe(el);
-            });
-            document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-            document.querySelectorAll('#home .profile-img').forEach(el => observer.observe(el));
-            document.querySelectorAll('.box, .blog-link').forEach(el => observer.observe(el)); // Include dynamic news items
+            const elementsToObserve = document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link');
+    
+            elementsToObserve.forEach(el => observer.observe(el));
         };
-
+    
         window.updateObservers();
     }
-
+    
+    
     // Initialize animations
     setupScrollAnimations();
 
@@ -545,12 +531,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Touch focus for textarea
-    document.querySelectorAll('textarea').forEach(textarea => {
-        textarea.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            textarea.focus();
-        }, { passive: false });
-    });
+    // document.querySelectorAll('textarea').forEach(textarea => {
+    //     textarea.addEventListener('touchstart', (e) => {
+    //         e.preventDefault();
+    //         textarea.focus();
+    //     }, { passive: false });
+    // });
 
     // Fix mobile responsiveness
     function applyInitialResponsiveSettings() {
