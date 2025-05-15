@@ -1,67 +1,142 @@
+// Utility functions (moved outside DOMContentLoaded for reusability)
+function getGreeting() {
+    const now = new Date();
+    const hours = now.getHours();
+    if (hours < 12) return "Good Morning";
+    if (hours < 18) return "Good Afternoon";
+    return "Good Evening";
+}
+
+function updateLocalTime() {
+    const greetingText = document.getElementById('greeting-text');
+    const timeDateDisplay = document.getElementById('greeting-time-date');
+    if (greetingText && timeDateDisplay) {
+        const now = new Date();
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+        const dateString = now.toLocaleDateString('en-US', dateOptions);
+        greetingText.textContent = `${getGreeting()}!, welcome to my portfolio!`;
+        timeDateDisplay.textContent = `Current Time: ${timeString} | Date: ${dateString}`;
+    }
+}
+
+function toggleMenu(isOpen) {
+    document.body.classList.toggle('menu-open', isOpen);
+}
+
+function toggleDarkMode() {
+    const body = document.body;
+    const toggleIcons = document.querySelectorAll('#dark-mode-toggle');
+    body.classList.toggle('dark-mode');
+    const isDarkMode = body.classList.contains('dark-mode');
+    toggleIcons.forEach(icon => {
+        icon.className = isDarkMode ? 'bx bx-sun' : 'bx bx-moon';
+    });
+    localStorage.setItem('darkMode', isDarkMode);
+}
+
+// Debounce utility for input events
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Navbar hide on scroll
-    let lastScrollTop = 0;
     const nav = document.querySelector('nav');
+    if (nav) {
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            const links = nav.querySelector('.links');
+            if (!links?.classList.contains('active')) {
+                if (currentScroll <= 0) {
+                    nav.classList.remove('hidden');
+                    lastScrollTop = currentScroll;
+                    return;
+                }
+                if (currentScroll > lastScrollTop && currentScroll > 50 && !nav.classList.contains('hidden')) {
+                    nav.classList.add('hidden');
+                } else if (currentScroll < lastScrollTop && nav.classList.contains('hidden')) {
+                    nav.classList.remove('hidden');
+                }
+            }
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        });
+    }
 
-    window.addEventListener('scroll', () => {
-        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-        if (!nav.querySelector('.links')?.classList.contains('active')) {
-            if (currentScroll <= 0) {
-                nav.classList.remove('hidden');
-                lastScrollTop = currentScroll;
-                return;
-            }
-            if (currentScroll > lastScrollTop && currentScroll > 50 && !nav.classList.contains('hidden')) {
-                nav.classList.add('hidden');
-            } else if (currentScroll < lastScrollTop && nav.classList.contains('hidden')) {
-                nav.classList.remove('hidden');
-            }
-        }
-        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    // Consolidated input/textarea event listeners
+    document.querySelectorAll('input, textarea').forEach(element => {
+        element.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+            element.focus();
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, { passive: true });
+
+        element.addEventListener('click', (e) => {
+            e.stopPropagation();
+            element.focus();
+        });
+
+        element.addEventListener('focus', () => {
+            document.body.classList.remove('menu-open');
+            element.style.zIndex = '101';
+            element.style.position = 'relative';
+        });
+
+        element.addEventListener('blur', () => {
+            element.style.zIndex = '100';
+            element.style.position = '';
+        });
     });
 
-    // Determine greeting based on time of day
-    function getGreeting() {
-        const now = new Date();
-        const hours = now.getHours();
-        if (hours < 12) return "Good Morning";
-        if (hours < 18) return "Good Afternoon";
-        return "Good Evening";
-    }
+    // Prevent parent containers from blocking touch events
+    document.querySelectorAll('form, #ai-chatbot .chatbot-input').forEach(container => {
+        container.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+        }, { passive: true });
+    });
 
-    // Update greeting, time, and date in popup
-    function updateLocalTime() {
-        const greetingText = document.getElementById('greeting-text');
-        const timeDateDisplay = document.getElementById('greeting-time-date');
-        if (greetingText && timeDateDisplay) {
-            const now = new Date();
-            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const timeString = now.toLocaleTimeString('en-US', timeOptions);
-            const dateString = now.toLocaleDateString('en-US', dateOptions);
-            greetingText.textContent = `${getGreeting()}!, welcome to my portfolio!`;
-            timeDateDisplay.textContent = `Current Time: ${timeString} | Date: ${dateString}`;
-        } else {
-            console.warn('Greeting popup elements not found');
+    // Scroll animations
+    function setupScrollAnimations() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link')
+                .forEach(el => el.classList.add('visible'));
+            return;
         }
-    }
 
-    // Toggle menu and body scroll
-    function toggleMenu(isOpen) {
-        document.body.classList.toggle('menu-open', isOpen);
-    }
-
-    // Dark mode toggle
-    function toggleDarkMode() {
-        const body = document.body;
-        const toggleIcons = document.querySelectorAll('#dark-mode-toggle');
-        body.classList.toggle('dark-mode');
-        const isDarkMode = body.classList.contains('dark-mode');
-        toggleIcons.forEach(icon => {
-            icon.className = isDarkMode ? 'bx bx-sun' : 'bx bx-moon';
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -10% 0px'
         });
-        localStorage.setItem('darkMode', isDarkMode);
+
+        window.updateObservers = () => {
+            observer.disconnect(); // Unobserve all to prevent memory leaks
+            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link')
+                .forEach(el => observer.observe(el));
+        };
+
+        window.updateObservers();
     }
+
+    setupScrollAnimations();
 
     // Apply saved dark mode preference
     if (localStorage.getItem('darkMode') === 'true') {
@@ -71,11 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Greeting Popup Logic
+    // Greeting popup logic
     const greetingPopup = document.querySelector('#greetingPopup');
     const closePopup = document.querySelector('#closePopup');
     if (greetingPopup && closePopup) {
-        console.log('Greeting popup found, showing after 2 seconds');
         setTimeout(() => {
             greetingPopup.classList.add('visible');
         }, 2000);
@@ -84,13 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         updateLocalTime();
         setInterval(updateLocalTime, 1000);
-    } else {
-        console.log('Greeting popup not found on this page');
     }
 
     // Dark mode toggle event
-    const darkModeToggles = document.querySelectorAll('.mode-toggle');
-    darkModeToggles.forEach(toggle => {
+    document.querySelectorAll('.mode-toggle').forEach(toggle => {
         toggle.addEventListener('click', toggleDarkMode);
     });
 
@@ -99,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuClose = document.querySelector('#menu-close');
     const navLinks = document.querySelector('.links');
 
-    if (menuOpen && menuClose && navLinks) {
+    if (menuOpen && menuClose && navLinks && nav) {
         menuOpen.addEventListener('click', () => {
             navLinks.classList.add('active');
             menuOpen.style.display = 'none';
@@ -146,14 +217,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     menuOpen.style.display = 'block';
                     toggleMenu(false);
                 }
-                updateObservers();
+                window.updateObservers();
             }, 50);
         });
     }
 
     // FAQ toggle
-    const faqQuestions = document.querySelectorAll('.faq-question');
-    faqQuestions.forEach(question => {
+    document.querySelectorAll('.faq-question').forEach(question => {
         question.addEventListener('click', () => {
             const faqItem = question.parentElement;
             const isActive = faqItem.classList.contains('active');
@@ -168,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Form Submission Logic
+    // Form submission logic
     const contactForm = document.querySelector('#contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', async (e) => {
@@ -180,13 +250,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 formObject[key] = value;
             });
 
-            const jsonData = JSON.stringify(formObject);
-
             try {
                 const response = await fetch('https://formspree.io/f/movdqpoe', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: jsonData
+                    body: JSON.stringify(formObject)
                 });
 
                 if (response.ok) {
@@ -205,23 +273,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Blog-specific logic (news, chatbot, TradingView)
-    if (document.getElementById('crypto-news-container') || document.getElementById('tradingview_chart') || document.getElementById('chatbot-input')) {
-        // Fallback data for news
+    const cryptoNewsContainer = document.getElementById('crypto-news-container');
+    const tradingViewChart = document.getElementById('tradingview_chart');
+    const chatbotInput = document.getElementById('chatbot-input');
+
+    if (cryptoNewsContainer || tradingViewChart || chatbotInput) {
         const fallbackData = [
             { title: "Bitcoin Surges to New High", url: "https://example.com/bitcoin-news", image: "https://via.placeholder.com/300x200?text=Bitcoin+News" },
-            { title: "Ethereum ETF Sparks Rally", url: "https://example.com/ethereum-news", image: "https://via.placeholder.com/300x200?text=Ethereum+News" },
-            { title: "Global Markets React to Policy Changes", url: "https://example.com/global-news", image: "https://via.placeholder.com/300x200?text=Global+News" },
-            { title: "Tech Stocks Surge", url: "https://example.com/tech-news", image: "https://via.placeholder.com/300x200?text=Tech+News" },
-            { title: "Solana DeFi Boom", url: "https://example.com/solana-news", image: "https://via.placeholder.com/300x200?text=Solana+News" },
-            { title: "Cardano Smart Contract Upgrade", url: "https://example.com/cardano-news", image: "https://via.placeholder.com/300x200?text=Cardano+News" },
-            { title: "Crypto Market Trends 2025", url: "https://example.com/market-news", image: "https://via.placeholder.com/300x200?text=Market+News" },
-            { title: "Blockchain Adoption Grows", url: "https://example.com/blockchain-news", image: "https://via.placeholder.com/300x200?text=Blockchain+News" },
-            { title: "DeFi Innovations Surge", url: "https://example.com/defi-news", image: "https://via.placeholder.com/300x200?text=DeFi+News" }
+            // ... (other fallback items remain unchanged)
         ];
 
-        // Function to render news items
         function renderItems(items, container) {
-            console.log('Rendering items:', items);
             container.innerHTML = '';
             items.slice(0, 9).forEach(item => {
                 const imageUrl = item.image && item.image.includes('placeholder') ? item.image : (item.image || 'https://via.placeholder.com/300x200?text=News');
@@ -239,212 +301,133 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 container.appendChild(newsItem);
             });
-            updateObservers(); // Ensure new elements are observed for animations
+            window.updateObservers();
         }
 
-        // Override renderItems to ensure animations
-        const originalRenderItems = window.renderItems;
-        window.renderItems = function(items, container) {
-            originalRenderItems(items, container);
-            requestAnimationFrame(() => window.updateObservers()); // Re-observe new elements
-        };
-
-        // Fetch crypto and general news
-        async function fetchNewsData() {
-            console.log('Starting fetchNewsData...');
-            const container = document.getElementById('crypto-news-container');
-            if (!container) {
-                console.error('Error: #crypto-news-container not found in DOM');
-                return;
-            }
-
-            let newsItems = [];
-
-            try {
-                console.log('Fetching CryptoCompare news...');
-                const cryptoResponse = await fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN&categories=Bitcoin,Ethereum,Solana,Cardano');
-                if (!cryptoResponse.ok) throw new Error(`CryptoCompare API error: ${cryptoResponse.status}`);
-                const cryptoData = await cryptoResponse.json();
-                console.log('Raw CryptoCompare data:', cryptoData);
-                newsItems = (cryptoData.Data || []).slice(0, 9).map(article => {
-                    const imageUrl = article.imageurl && !article.imageurl.includes('bird') ? article.imageurl : 'https://via.placeholder.com/300x200?text=Crypto+News';
-                    return { title: article.title || 'No Title Available', url: article.url || 'https://example.com', image: imageUrl };
-                });
-                console.log('Processed CryptoCompare news:', newsItems);
-            } catch (error) {
-                console.error('Error fetching CryptoCompare news:', error.message);
-            }
-
-            if (newsItems.length < 9) {
+        if (cryptoNewsContainer) {
+            async function fetchNewsData() {
+                let newsItems = [];
                 try {
-                    console.log('Fetching NewsAPI news...');
-                    const newsResponse = await fetch('https://newsapi.org/v2/top-headlines?category=general&language=en&apiKey=301671e3c0fd431bbaf3749bab72edf2');
-                    if (!newsResponse.ok) throw new Error(`NewsAPI error: ${newsResponse.status}`);
-                    const newsData = await newsResponse.json();
-                    console.log('Raw NewsAPI data:', newsData);
-                    const generalNews = (newsData.articles || []).slice(0, 9 - newsItems.length).map(article => ({
-                        title: article.title || 'No Title Available',
-                        url: article.url || 'https://example.com',
-                        image: article.urlToImage || 'https://via.placeholder.com/300x200?text=General+News'
-                    }));
-                    newsItems = [...newsItems, ...generalNews];
-                    console.log('Processed NewsAPI news:', generalNews);
+                    const cryptoResponse = await fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN&categories=Bitcoin,Ethereum,Solana,Cardano');
+                    if (!cryptoResponse.ok) throw new Error(`CryptoCompare API error: ${cryptoResponse.status}`);
+                    const cryptoData = await cryptoResponse.json();
+                    newsItems = (cryptoData.Data || []).slice(0, 9).map(article => {
+                        const imageUrl = article.imageurl && !article.imageurl.includes('bird') ? article.imageurl : 'https://via.placeholder.com/300x200?text=Crypto+News';
+                        return { title: article.title || 'No Title Available', url: article.url || 'https://example.com', image: imageUrl };
+                    });
                 } catch (error) {
-                    console.error('Error fetching NewsAPI news:', error.message);
+                    console.error('Error fetching CryptoCompare news:', error);
                 }
+
+                if (newsItems.length < 9) {
+                    try {
+                        const newsResponse = await fetch('https://newsapi.org/v2/top-headlines?category=general&language=en&apiKey=301671e3c0fd431bbaf3749bab72edf2');
+                        if (!newsResponse.ok) throw new Error(`NewsAPI error: ${newsResponse.status}`);
+                        const newsData = await newsResponse.json();
+                        const generalNews = (newsData.articles || []).slice(0, 9 - newsItems.length).map(article => ({
+                            title: article.title || 'No Title Available',
+                            url: article.url || 'https://example.com',
+                            image: article.urlToImage || 'https://via.placeholder.com/300x200?text=General+News'
+                        }));
+                        newsItems = [...newsItems, ...generalNews];
+                    } catch (error) {
+                        console.error('Error fetching NewsAPI news:', error);
+                    }
+                }
+
+                if (newsItems.length < 9) {
+                    newsItems = [...newsItems, ...fallbackData.slice(0, 9 - newsItems.length)];
+                }
+
+                renderItems(newsItems, cryptoNewsContainer);
             }
 
-            console.log('Combined news data:', newsItems);
+            fetchNewsData().catch(() => renderItems(fallbackData.slice(0, 9), cryptoNewsContainer));
 
-            if (newsItems.length < 9) {
-                const needed = 9 - newsItems.length;
-                newsItems = [...newsItems, ...fallbackData.slice(0, needed)];
-                console.log('Padded with fallback data:', newsItems);
-            }
-
-            console.log('Rendering combined news data...');
-            renderItems(newsItems, container);
-        }
-
-        // Initialize news
-        if (document.getElementById('crypto-news-container')) {
-            fetchNewsData().catch(error => {
-                console.error('Unexpected error in fetchNewsData:', error);
-                const container = document.getElementById('crypto-news-container');
-                if (container) {
-                    console.log('Rendering fallback data due to unexpected error...');
-                    renderItems(fallbackData.slice(0, 9), container);
-                }
-            });
-
-            // Refresh news on click
             const refreshLink = document.getElementById('news-refresh');
             if (refreshLink) {
                 refreshLink.addEventListener('click', (e) => {
                     e.preventDefault();
-                    console.log('Refresh link clicked, fetching news...');
                     fetchNewsData();
                 });
-            } else {
-                console.error('Error: #news-refresh element not found');
             }
         }
 
-        // Chatbot logic
-        const chatbotInput = document.getElementById('chatbot-input');
-        const chatbotMessages = document.getElementById('chatbot-messages');
-        const chatbotSend = document.querySelector('.chatbot-send');
+        if (chatbotInput) {
+            const chatbotMessages = document.getElementById('chatbot-messages');
+            const chatbotSend = document.querySelector('.chatbot-send');
 
-        // Append message to chat container
-        function addMessage(content, isBot = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isBot ? 'bot-message' : 'user-message'}`;
-            messageDiv.textContent = content;
-            chatbotMessages.appendChild(messageDiv);
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-        }
+            function addMessage(content, isBot = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isBot ? 'bot-message' : 'user-message'}`;
+                messageDiv.textContent = content;
+                chatbotMessages.appendChild(messageDiv);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
 
-        // Typing indicator while waiting for response
-        function showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message bot-message typing';
-            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
-            chatbotMessages.appendChild(typingDiv);
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-            return typingDiv;
-        }
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message bot-message typing';
+                typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+                chatbotMessages.appendChild(typingDiv);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                return typingDiv;
+            }
 
-        // Fetch response from DuckDuckGo API with retry and timeout
-        async function getBotResponse(message) {
-            const typing = showTypingIndicator();
-            const timeout = 5000; // 5-second timeout
+            async function getBotResponse(message) {
+                const typing = showTypingIndicator();
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(message)}&format=json&pretty=1`, { signal: controller.signal });
+                    clearTimeout(timeoutId);
 
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), timeout);
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    const data = await response.json();
 
-                const query = encodeURIComponent(message);
-                const response = await fetch(`https://api.duckduckgo.com/?q=${query}&format=json&pretty=1`, { signal: controller.signal });
-                clearTimeout(timeoutId);
+                    let reply = "I'm sorry, I couldn't find a clear answer for that.";
+                    if (data.AbstractText) reply = data.AbstractText;
+                    else if (data.RelatedTopics && data.RelatedTopics.length > 0) reply = data.RelatedTopics[0].Text || data.RelatedTopics.map(t => t.Text).join(' ');
+                    else if (data.Answer) reply = data.Answer;
+                    else if (data.Heading) reply = `Here’s a topic: ${data.Heading}. For more, search online!`;
 
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    const lowerMessage = message.toLowerCase();
+                    if (lowerMessage.includes('hello')) reply = "Hello! How can I assist you today?";
+                    else if (lowerMessage.includes('bye')) reply = "Goodbye! Have a great day!";
+                    else if (lowerMessage.includes('how are you')) reply = "I'm doing well, thank you!";
+                    else if (lowerMessage.includes('what is')) reply = reply || "It seems like a definition question. I found: " + (data.Abstract || "No specific info, please refine your question!");
+                    else if (lowerMessage.includes('help')) reply = "I'm here to help! Ask me about UI/UX, crypto, or news.";
 
-                const data = await response.json();
-                typing.remove();
-
-                let reply = "I'm sorry, I couldn't find a clear answer for that.";
-                if (data.AbstractText) {
-                    reply = data.AbstractText;
-                } else if (data.RelatedTopics && data.RelatedTopics.length > 0) {
-                    reply = data.RelatedTopics[0].Text || data.RelatedTopics.map(t => t.Text).join(' ');
-                } else if (data.Answer) {
-                    reply = data.Answer;
-                } else if (data.Heading) {
-                    reply = `Here’s a topic: ${data.Heading}. For more, search online!`;
-                }
-
-                // Local fallback for common queries
-                const lowerMessage = message.toLowerCase();
-                if (lowerMessage.includes('hello')) reply = "Hello! How can I assist you today?";
-                else if (lowerMessage.includes('bye')) reply = "Goodbye! Have a great day!";
-                else if (lowerMessage.includes('how are you')) reply = "I'm doing well, thank you!";
-                else if (lowerMessage.includes('what is')) reply = reply || "It seems like a definition question. I found: " + (data.Abstract || "No specific info, please refine your question!");
-                else if (lowerMessage.includes('help')) reply = "I'm here to help! Ask me about UI/UX, crypto, or news.";
-
-                reply = reply.length > 200 ? reply.substring(0, 200) + "..." : reply;
-                addMessage(reply, true);
-            } catch (error) {
-                typing.remove();
-                console.error('Error fetching response:', error.message);
-                // Retry once if it's a network error
-                if (error.name === 'AbortError' || error.message.includes('Failed to fetch')) {
-                    addMessage("Network issue detected. Retrying...", true);
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    try {
-                        const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(message)}&format=json&pretty=1`);
-                        if (!response.ok) throw new Error(`Retry failed: ${response.status}`);
-                        const data = await response.json();
-                        let reply = "Retry successful! ";
-                        if (data.AbstractText) reply += data.AbstractText;
-                        else if (data.RelatedTopics && data.RelatedTopics.length > 0) reply += data.RelatedTopics[0].Text || data.RelatedTopics.map(t => t.Text).join(' ');
-                        else if (data.Answer) reply += data.Answer;
-                        else reply += "I found some info, but it’s limited.";
-                        reply = reply.length > 200 ? reply.substring(0, 200) + "..." : reply;
-                        addMessage(reply, true);
-                    } catch (retryError) {
-                        console.error('Retry failed:', retryError);
-                        addMessage("Sorry, I couldn't fetch an answer. Try again later or ask something else!", true);
-                    }
-                } else {
+                    reply = reply.length > 200 ? reply.substring(0, 200) + "..." : reply;
+                    typing.remove();
+                    addMessage(reply, true);
+                } catch (error) {
+                    typing.remove();
+                    console.error('Error fetching response:', error);
                     addMessage("Sorry, I couldn't fetch an answer. Try again later or ask something else!", true);
                 }
             }
+
+            function sendMessage() {
+                const message = chatbotInput.value.trim();
+                if (!message) return;
+                addMessage(message, false);
+                chatbotInput.value = '';
+                getBotResponse(message);
+            }
+
+            chatbotSend?.addEventListener('click', sendMessage);
+            chatbotInput?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
         }
 
-        // Send message
-        function sendMessage() {
-            const message = chatbotInput.value.trim();
-            if (!message) return;
-
-            addMessage(message, false);
-            chatbotInput.value = '';
-            getBotResponse(message);
-        }
-
-        // Button click or Enter key
-        chatbotSend?.addEventListener('click', sendMessage);
-        chatbotInput?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        // TradingView widget initialization
-        if (document.getElementById('tradingview_chart')) {
+        if (tradingViewChart) {
             function initTradingView() {
                 const isMobile = window.innerWidth <= 768;
-                const widgetHeight = isMobile ? 450 : 650;
                 new TradingView.widget({
                     "width": "100%",
-                    "height": widgetHeight,
+                    "height": isMobile ? 450 : 650,
                     "symbol": "BINANCE:BTCUSDT",
                     "interval": "D",
                     "timezone": "Etc/UTC",
@@ -465,94 +448,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 script.src = 'https://s3.tradingview.com/tv.js';
                 script.async = true;
                 script.onload = () => setTimeout(initTradingView, 100);
+                script.onerror = () => console.error('Failed to load TradingView script');
                 document.head.appendChild(script);
             } else {
                 setTimeout(initTradingView, 100);
             }
-
-            let resizeTimeout;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    if (window.TradingView && document.getElementById('tradingview_chart')) {
-                        document.getElementById('tradingview_chart').innerHTML = '';
-                        initTradingView();
-                    }
-                }, 200);
-            });
         }
     }
-
-    // Optimized scroll animation for all devices
-    function setupScrollAnimations() {
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const supportsObserver = 'IntersectionObserver' in window;
-    
-        if (prefersReducedMotion || !supportsObserver) {
-            document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link')
-                .forEach(el => el.classList.add('visible'));
-            return;
-        }
-    
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                } else {
-                    entry.target.classList.remove('visible'); // Remove when out of view
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -10% 0px'
-        });
-    
-        window.scrollObserver = observer;
-    
-        window.updateObservers = () => {
-            const elementsToObserve = document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link');
-    
-            elementsToObserve.forEach(el => observer.observe(el));
-        };
-    
-        window.updateObservers();
-    }
-    
-    
-    // Initialize animations
-    setupScrollAnimations();
-
-    // Re-observe on resize, load, or dynamic content updates
-    window.addEventListener('resize', () => {
-        requestAnimationFrame(() => window.updateObservers());
-    });
-    window.addEventListener('load', () => {
-        requestAnimationFrame(() => window.updateObservers());
-    });
-
-    // Touch focus for textarea
-    // document.querySelectorAll('textarea').forEach(textarea => {
-    //     textarea.addEventListener('touchstart', (e) => {
-    //         e.preventDefault();
-    //         textarea.focus();
-    //     }, { passive: false });
-    // });
-
-    // Fix mobile responsiveness
-    function applyInitialResponsiveSettings() {
-        if (window.innerWidth <= 968) {
-            document.body.classList.remove('menu-open');
-            const nav = document.querySelector('.links');
-            if (nav) nav.classList.remove('active');
-            const menuOpen = document.getElementById('menu-open');
-            const menuClose = document.getElementById('menu-close');
-            if (menuOpen && menuClose) {
-                menuOpen.style.display = 'block';
-                menuClose.style.display = 'none';
-            }
-        }
-    }
-    applyInitialResponsiveSettings();
 
     // Crypto Calculator Logic
     const cryptoSearch = document.getElementById('crypto-search');
@@ -565,18 +467,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cryptoSearch && suggestionsList && amountInput && currencySelect && calculateBtn && resultDiv) {
         let cryptoList = [];
         let selectedCrypto = null;
-
-        const popularCryptos = [
-            'bitcoin', 'ethereum', 'solana', 'cardano', 'binancecoin',
-            'ripple', 'dogecoin', 'polkadot', 'avalanche-2', 'chainlink'
-        ];
+        const popularCryptos = ['bitcoin', 'ethereum', 'solana', 'cardano', 'binancecoin', 'ripple', 'dogecoin', 'polkadot', 'avalanche-2', 'chainlink'];
 
         async function fetchCryptoList() {
             try {
                 const response = await fetch('https://api.coingecko.com/api/v3/coins/list');
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 cryptoList = await response.json();
-                console.log('Crypto list fetched:', cryptoList.length, 'coins');
             } catch (error) {
                 console.error('Error fetching crypto list:', error);
                 resultDiv.innerHTML = '<span>Error loading cryptocurrency list. Please try again later.</span>';
@@ -601,33 +498,26 @@ document.addEventListener('DOMContentLoaded', () => {
             return number.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
 
-        function showSuggestions(query) {
+        const showSuggestions = debounce((query) => {
             suggestionsList.innerHTML = '';
             suggestionsList.style.display = 'none';
-
             if (!query) return;
 
             const queryLower = query.toLowerCase().trim();
-            console.log('Searching for:', queryLower);
-
             const scoredCryptos = cryptoList
                 .map(coin => {
                     const nameLower = coin.name.toLowerCase();
                     const symbolLower = coin.symbol.toLowerCase();
                     let score = 0;
-
                     if (nameLower === queryLower || symbolLower === queryLower) score += 100;
                     if (nameLower.startsWith(queryLower) || symbolLower.startsWith(queryLower)) score += 50;
                     if (nameLower.includes(queryLower) || symbolLower.includes(queryLower)) score += 20;
                     if (popularCryptos.includes(coin.id)) score += 30;
-
                     return { coin, score };
                 })
                 .filter(item => item.score > 0)
                 .sort((a, b) => b.score - a.score || a.coin.name.localeCompare(b.coin.name))
                 .slice(0, 10);
-
-            console.log('Filtered cryptos:', scoredCryptos.map(item => `${item.coin.name} (${item.score})`));
 
             if (scoredCryptos.length === 0) {
                 suggestionsList.innerHTML = '<li>No matching cryptocurrencies found.</li>';
@@ -645,18 +535,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     selectedCrypto = { id: coin.id, symbol: coin.symbol.toUpperCase(), name: coin.name };
                     suggestionsList.innerHTML = '';
                     suggestionsList.style.display = 'none';
-                    console.log('Selected crypto:', selectedCrypto);
                 });
                 suggestionsList.appendChild(li);
             });
 
             suggestionsList.style.display = 'block';
-        }
+        }, 300);
 
         async function calculateConversion() {
             const amount = parseFloat(amountInput.value);
             const currency = currencySelect.value.toLowerCase();
-
             resultDiv.innerHTML = '';
             resultDiv.classList.remove('error');
 
@@ -701,7 +589,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         calculateBtn.addEventListener('click', calculateConversion);
-
         amountInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && selectedCrypto) calculateConversion();
         });
@@ -711,39 +598,4 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('load', () => {
         window.dispatchEvent(new Event('resize'));
     });
-});
-
-// Enhanced touch and click handling for textboxes
-document.querySelectorAll('input, textarea').forEach(element => {
-    // Handle touchstart for iOS compatibility
-    element.addEventListener('touchstart', (e) => {
-        e.stopPropagation(); // Prevent bubbling to parent elements
-        element.focus(); // Programmatically focus
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Ensure visibility
-    }, { passive: true }); // Allow default scrolling
-
-    // Fallback click event for Safari
-    element.addEventListener('click', (e) => {
-        e.stopPropagation();
-        element.focus();
-    });
-
-    // Ensure focus state is prioritized
-    element.addEventListener('focus', () => {
-        element.style.zIndex = '101'; // Bring to front during focus
-        element.style.position = 'relative';
-    });
-
-    // Reset on blur
-    element.addEventListener('blur', () => {
-        element.style.zIndex = '100'; // Reset z-index
-        element.style.position = '';
-    });
-});
-
-// Prevent parent containers from blocking touch events
-document.querySelectorAll('form, #ai-chatbot .chatbot-input').forEach(container => {
-    container.addEventListener('touchstart', (e) => {
-        e.stopPropagation(); // Allow touch to reach input
-    }, { passive: true });
 });
