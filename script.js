@@ -1,4 +1,3 @@
-// Utility functions (moved outside DOMContentLoaded for reusability)
 function getGreeting() {
     const now = new Date();
     const hours = now.getHours();
@@ -16,7 +15,9 @@ function updateLocalTime() {
         const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const timeString = now.toLocaleTimeString('en-US', timeOptions);
         const dateString = now.toLocaleDateString('en-US', dateOptions);
-        greetingText.textContent = `${getGreeting()}!, welcome to my portfolio!`;
+        
+        // Set greeting text based on page
+        greetingText.textContent = window.location.pathname.includes('technexus.html') ? 'Welcome to Tech Nexus' : `${getGreeting()}!, welcome to my portfolio!`;
         timeDateDisplay.textContent = `Current Time: ${timeString} | Date: ${dateString}`;
     }
 }
@@ -36,7 +37,6 @@ function toggleDarkMode() {
     localStorage.setItem('darkMode', isDarkMode);
 }
 
-// Debounce utility for input events
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -50,7 +50,6 @@ function debounce(func, wait) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Navbar hide on scroll
     const nav = document.querySelector('nav');
     if (nav) {
         let lastScrollTop = 0;
@@ -73,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Consolidated input/textarea event listeners
     document.querySelectorAll('input, textarea').forEach(element => {
         element.addEventListener('touchstart', (e) => {
             e.stopPropagation();
@@ -98,14 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Prevent parent containers from blocking touch events
     document.querySelectorAll('form, #ai-chatbot .chatbot-input').forEach(container => {
         container.addEventListener('touchstart', (e) => {
             e.stopPropagation();
         }, { passive: true });
     });
 
-    // Scroll animations
     function setupScrollAnimations() {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (prefersReducedMotion || !('IntersectionObserver' in window)) {
@@ -128,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         window.updateObservers = () => {
-            observer.disconnect(); // Unobserve all to prevent memory leaks
+            observer.disconnect();
             document.querySelectorAll('.mobile-scroll, .slide-left, .slide-right, .scroll-reveal, #home .profile-img, .box, .blog-link')
                 .forEach(el => observer.observe(el));
         };
@@ -138,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupScrollAnimations();
 
-    // Apply saved dark mode preference
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
         document.querySelectorAll('#dark-mode-toggle').forEach(icon => {
@@ -146,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Greeting popup logic
     const greetingPopup = document.querySelector('#greetingPopup');
     const closePopup = document.querySelector('#closePopup');
     if (greetingPopup && closePopup) {
@@ -160,12 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(updateLocalTime, 1000);
     }
 
-    // Dark mode toggle event
     document.querySelectorAll('.mode-toggle').forEach(toggle => {
         toggle.addEventListener('click', toggleDarkMode);
     });
 
-    // Mobile menu toggle
     const menuOpen = document.querySelector('#menu-open');
     const menuClose = document.querySelector('#menu-close');
     const navLinks = document.querySelector('.links');
@@ -222,7 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // FAQ toggle
     document.querySelectorAll('.faq-question').forEach(question => {
         question.addEventListener('click', () => {
             const faqItem = question.parentElement;
@@ -238,7 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Form submission logic
     const contactForm = document.querySelector('#contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', async (e) => {
@@ -272,7 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Blog-specific logic (news, chatbot, TradingView)
     const cryptoNewsContainer = document.getElementById('crypto-news-container');
     const tradingViewChart = document.getElementById('tradingview_chart');
     const chatbotInput = document.getElementById('chatbot-input');
@@ -280,7 +269,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cryptoNewsContainer || tradingViewChart || chatbotInput) {
         const fallbackData = [
             { title: "Bitcoin Surges to New High", url: "https://example.com/bitcoin-news", image: "https://via.placeholder.com/300x200?text=Bitcoin+News" },
-            // ... (other fallback items remain unchanged)
+            { title: "Ethereum ETF Sparks Rally", url: "https://example.com/ethereum-news", image: "https://via.placeholder.com/300x200?text=Ethereum+News" },
+            { title: "Global Markets React to Policy Changes", url: "https://example.com/global-news", image: "https://via.placeholder.com/300x200?text=Global+News" },
+            { title: "Tech Stocks Surge", url: "https://example.com/tech-news", image: "https://via.placeholder.com/300x200?text=Tech+News" },
+            { title: "Solana DeFi Boom", url: "https://example.com/solana-news", image: "https://via.placeholder.com/300x200?text=Solana+News" },
+            { title: "Cardano Smart Contract Upgrade", url: "https://example.com/cardano-news", image: "https://via.placeholder.com/300x200?text=Cardano+News" },
+            { title: "Crypto Market Trends 2025", url: "https://example.com/market-news", image: "https://via.placeholder.com/300x200?text=Market+News" },
+            { title: "Blockchain Adoption Grows", url: "https://example.com/blockchain-news", image: "https://via.placeholder.com/300x200?text=Blockchain+News" },
+            { title: "DeFi Innovations Surge", url: "https://example.com/defi-news", image: "https://via.placeholder.com/300x200?text=DeFi+News" }
         ];
 
         function renderItems(items, container) {
@@ -456,7 +452,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Crypto Calculator Logic
     const cryptoSearch = document.getElementById('crypto-search');
     const suggestionsList = document.getElementById('crypto-suggestions');
     const amountInput = document.getElementById('crypto-amount');
@@ -594,7 +589,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Trigger resize on load
     window.addEventListener('load', () => {
         window.dispatchEvent(new Event('resize'));
     });
